@@ -21,7 +21,7 @@ struct ContentView: View {
     @State private var isThinking: Bool = false
 
     let apiKey = Bundle.main.object(forInfoDictionaryKey: "CLAUDE_API_KEY") as? String ?? ""
-
+    
     var body: some View {
         VStack(spacing: 0) {
             headerBar
