@@ -1,9 +1,0 @@
-//
-//  Config.xcconfig
-//  Ember
-//
-//  Created by Marcus Win on 4/4/26.
-//
-CLAUDE_API_KEY = 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
-// Configuration settings file format documentation can be found at:
-// https://developer.apple.com/documentation/xcode/adding-a-build-configuration-file-to-your-project
