@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSContactsUsageDescription</key>
+	<string>To know who matters to you — so Ember focuses on them.</string>
 	<key>CLAUDE_API_KEY</key>
 	<string>$(CLAUDE_API_KEY)</string>
 	<key>NSAppTransportSecurity</key>
