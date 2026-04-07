@@ -1,58 +1,73 @@
 # Ember
 
-> *A patent-pending conversational UI framework for scalable personalization — across mobile, SMS, voice, spatial, and AiOT.*
+> *A patent-pending conversational context framework — not a group coordination agent.*
 
-**Current version: v0.7.0**
+**v1.0.0-beta — April 2026**
 
 ---
 
 ## What Ember is
 
-Ember is two things built on the same foundation.
+**Ember Framework** — a patent-pending infrastructure layer. Context is built through conversation, stored at the edge, and persists across every surface the user touches. No central database. No profiles. No forms.
 
-**Ember Framework** — an open-source infrastructure layer for building AI-powered conversational experiences that feel genuinely personal. Context is built through conversation, stored at the edge, and persists across every surface the user interacts on. No central data store. No user profiles. No forms.
+**Ember Agent** — the front-end facilitator built on the framework. Reads the context the framework holds. Acts on it. The agent is a surface. The framework is the invention.
 
-**Ember Application** — the reference implementation. A group coordination platform powered by an action-oriented AI agent. Used by social groups planning events and organizations collaborating, negotiating, and managing documents. Available on iOS. SMS surface in development.
+**Ember App** — the reference iOS implementation. Proof the framework works in production.
 
-The framework is licensable. The application is the proof it works.
-
----
-
-## The core insight
-
-Every AI personalization system today works the same way: collect data about users centrally, build a model, serve personalized responses from that model.
-
-Ember inverts this.
-
-Context is built **through conversation itself** — not data entry. It lives **at the edge** — on the user's device, not a server. It is **portable across surfaces** — the same context that informs a mobile conversation also informs an SMS reply, a voice interaction, a spatial overlay.
-
-This is the patent-pending mechanic: **a personalization architecture that scales without central data storage**, where individual context models are constructed, maintained, and transported through the conversational interface itself.
+**The one-liner:** *Instead of ads telling you where to go, let your friend's memory serve you.*
 
 ---
 
-## Build log — Lego bricks
+## The core mechanic
 
-Each brick is a self-contained, working feature. Ship one. Test it. Build the next.
+Every AI personalization system today stores user models centrally. Ember inverts this.
+
+Context is built **through conversation** — not data entry. It lives **at the edge** — on the user's device. It is **portable across surfaces** — mobile, SMS, voice, spatial, AiOT.
+
+**Patent-pending claim:** A personalization architecture that scales without central data storage, where individual context models are constructed and transported through the conversational interface itself.
+
+---
+
+## Brand
+
+Three colors. Pulled directly from the WatchWeWin logo.
+
+| Role | Hex | Source |
+|---|---|---|
+| Base | `#0e0d0b` | Near-black — logo background. Nav, dark sections, footer. |
+| Accent | `#2ec4b6` | Teal — geometric shape. CTAs, labels, hover states. |
+| Energy | `#e84d1c` | Orange-red — runner figure. Declaration section, energy moments. |
+
+Warm earth `#F7F5F0` — breathing room on light sections only. Never competes with brand colors.
+
+**Typography:** Playfair Display (headlines) + DM Sans (body/UI)
+
+---
+
+## Build log
 
 | Brick | Version | Status | What it built |
 |---|---|---|---|
-| **Brick 1** | v0.1.0 | ✅ Shipped | Project scaffolding — Xcode, SwiftUI, Hello World on device |
-| **Brick 2** | v0.2.0 | ✅ Shipped | Claude API integration — live responses in the simulator |
-| **Brick 3** | v0.3.0 | ✅ Shipped | Config.xcconfig — API key secure, never committed to Git |
-| **Brick 4** | v0.4.0 | ✅ Shipped | Conversation memory — full history sent on every Claude call |
-| **Brick 5** | v0.5.0 | ✅ Shipped | Contacts — iOS permission, real contact list, search, pull to refresh |
-| **Brick 6** | v0.6.0 | ✅ Shipped | Personal circle — add/remove, UserDefaults persistence, drift levels, context memory, pill strip |
-| **Brick 7** | v0.7.0 | ✅ Shipped | SMS drafting — MessageUI bridge, draft bubbles, Send via Messages |
-| **Brick A** | v0.8.0 | ✅ Shipped | Document intelligence — PDF upload, PDFKit extraction, RAG context injection, document vault |
-| **Brick B** | v0.9.0 | 🔨 Building | Voice input — SpeechKit, real-time transcription, mic button, listening banner |
-| **Brick C** | v1.0.0 | 📋 Planned | Voice output — Ember speaks responses, AVSpeechSynthesizer |
-| **Brick D** | v1.1.0 | 📋 Planned | SMS surface — Twilio integration, dedicated agent number, inbound client routing |
-| **Brick E** | v1.2.0 | 📋 Planned | Group coordination — multi-member groups, social + org types, group context |
-| **Brick F** | v1.3.0 | 📋 Planned | App Store submission — icon, launch screen, privacy policy, TestFlight beta |
-| **Brick G** | v2.0.0 | 🗺 Roadmap | Framework SDK — developer licensing, TypeScript + Swift packages |
-| **Brick H** | v2.1.0 | 🗺 Roadmap | Spatial surface — Apple Vision Pro, Meta glasses adapter |
-| **Brick I** | v2.2.0 | 🗺 Roadmap | AiOT surface — health monitors, wearables, passive signal collection |
-| **Brick J** | v3.0.0 | 🌅 Horizon | Quantum — probabilistic personalization at classical-impossible scale |
+| **1** | v0.1.0 | ✅ | Project scaffolding — Xcode, SwiftUI, Hello World on device |
+| **2** | v0.2.0 | ✅ | Claude API integration — live responses |
+| **3** | v0.3.0 | ✅ | Config.xcconfig — API key secure, never in Git |
+| **4** | v0.4.0 | ✅ | Conversation memory — full history per call |
+| **5** | v0.5.0 | ✅ | Contacts — iOS permission, real list, search, pull to refresh |
+| **6** | v0.6.0 | ✅ | Personal circle — add/remove, UserDefaults, drift levels, context memory |
+| **7** | v0.7.0 | ✅ | SMS drafting — MessageUI bridge, draft bubbles, Send via Messages |
+| **A** | v0.8.0 | ✅ | Document intelligence — PDF upload, PDFKit extraction, RAG injection |
+| **B** | v0.9.0 | ✅ | Voice input — SpeechKit, real-time transcription, mic button |
+| **E** | v0.10.0 | ✅ | Group threads — named groups, social + org types, persistent history |
+| **F** | v0.11.0 | ✅ | Cross-session memory — Claude summaries, injected on return |
+| **G** | v1.0.0 | ✅ | Pro tier — StoreKit IAP, manual enterprise unlock, paywall |
+| **Web** | v1.0.0 | ✅ | ember.watchwewin.com — Cloudflare proxy, lead capture, EmailJS transcripts |
+| **C** | v1.1.0 | 📋 | Voice output — Ember speaks responses (AVSpeechSynthesizer) |
+| **D** | v1.2.0 | 📋 | SMS surface — Twilio + Supabase Edge Functions |
+| **H** | v1.3.0 | 📋 | App Store — icon, launch screen, TestFlight public beta |
+| **I** | v2.0.0 | 🗺 | Framework SDK — developer licensing, Swift + TypeScript packages |
+| **J** | v2.1.0 | 🗺 | Spatial — Apple Vision Pro, Meta glasses adapter |
+| **K** | v2.2.0 | 🗺 | AiOT — health monitors, wearables, passive signal |
+| **L** | v3.0.0 | 🌅 | Quantum — probabilistic personalization at classical-impossible scale |
 
 ---
 
@@ -69,96 +84,96 @@ Each brick is a self-contained, working feature. Ship one. Test it. Build the ne
 │  └─────────────┘  └──────────────┘  └───────────────┘  │
 │                                                         │
 │  ┌─────────────────────────────────────────────────┐   │
-│  │              Surface Adapter Layer               │   │
-│  │  Mobile │ SMS │ Voice │ Spatial │ AiOT │ Quantum │   │
+│  │   Mobile │ SMS │ Voice │ Spatial │ AiOT │ Quantum│   │
 │  └─────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────┘
-                           │
-              ┌────────────┴────────────┐
-              │                         │
-    ┌─────────────────┐      ┌─────────────────────┐
-    │  Ember App      │      │  Licensed Apps       │
-    │  (Reference     │      │  (Built on           │
-    │  Implementation)│      │  Ember Framework)    │
-    └─────────────────┘      └─────────────────────┘
 ```
 
-### Framework layers
+---
 
-**Contextual Memory Engine**
-Builds and maintains individual context models through conversation. No forms. No explicit data entry. Context is inferred from natural language, stored on-device, and grows more specific with every interaction.
+## File structure
 
-**Conversation Engine**
-The AI layer. Receives context from the Memory Engine, generates responses through the Claude API, and feeds new context back into storage. The system prompt is dynamically assembled from stored context on every call.
-
-**Continuity Layer**
-The cross-surface transport mechanism. Context built on mobile is available to SMS. Context from SMS informs voice. Context persists when the user switches devices, surfaces, or modalities.
-
-**Surface Adapter Layer**
-The interface abstraction. Each surface implements the same adapter interface. Add a new surface by implementing the adapter — memory, conversation, and continuity layers work unchanged.
+```
+Ember/
+├── ContentView.swift        — Main UI. AppView enum. All surfaces.
+├── CircleStore.swift        — Individual people. Drift levels. Context memory.
+├── GroupStore.swift         — Named groups. Social + org. Persistent history.
+├── MemoryStore.swift        — Cross-session summaries. Claude-generated. Injected on return.
+├── DocumentStore.swift      — PDF text. RAG context builder. Property tagging.
+├── DocumentView.swift       — Upload, tag, activate documents. Pro feature.
+├── VoiceInputManager.swift  — SpeechKit. Real-time transcription. Permission handling.
+├── ProManager.swift         — StoreKit IAP. Manual enterprise unlock. Feature gating.
+├── ProPaywallView.swift     — Paywall UI. Feature comparison. Purchase flow.
+├── MessageComposer.swift    — MessageUI bridge. Pre-filled SMS/iMessage.
+└── EmberApp.swift           — App entry point.
+```
 
 ---
 
-## Agent persona
+## Current capabilities (v1.0.0-beta)
 
-Ember's agent is an **organization leader**: empathetic and action-oriented. Always resolves a situation. Never leaves a thread open.
+### Context framework
+- Individual context models built through conversation
+- Stored on-device via UserDefaults — no central server
+- Cross-session memory via Claude-generated summaries
+- Context injected into every API call dynamically
 
-This persona serves both use cases:
-- **Social groups** — friends coordinating events, reservations, plans. Warmer tone. Still moves to resolution.
-- **Organizations** — teams collaborating, negotiating, managing documents. More precise. Same resolve.
-
-The persona lives in the system prompt and can be adapted per deployment.
-
----
-
-## Current capabilities (v0.8.0)
-
-### Group coordination
-- Personal circle of people to coordinate between
-- Drift level tracking per person (connected / drifting / distant / unknown)
-- Context memory built through conversation — last interaction, shared background, current situation
+### Personal circle
+- Add people from iOS Contacts
+- Drift level tracking: connected / drifting / distant / unknown
+- Context memory per person — last interaction, background, current situation
 - Quick-access pill strip for instant person switching
-- Circle persists across app restarts
 
-### Document intelligence (Enterprise)
-- PDF upload from Files, iCloud, Dropbox, or any iOS document provider
-- PDFKit text extraction on a background thread
-- Document tagged to property address or topic
-- RAG (Retrieval-Augmented Generation) — extracted text injected into Claude's context window
+### Group threads
+- Named groups — social or organizational type
+- Add CircleMembers to groups
+- Persistent group conversation history
+- Cross-session group memory summaries
+
+### Document intelligence (Pro)
+- PDF upload from Files, iCloud, Dropbox
+- PDFKit text extraction on background thread
+- Tagged to property address or topic
+- RAG injection — document text in Claude context window
 - Active document banner in conversation
-- Document vault with search
+
+### Voice input
+- Tap mic to speak
+- SpeechKit real-time transcription
+- Words appear in text field as you speak
+- Listening banner with animated bars
 
 ### SMS drafting
-- Ember drafts a specific, warm message based on stored context
-- Draft appears as a bubble with dashed border
-- Send via Messages opens native iMessage / SMS pre-filled
-- User reviews and sends — Ember never sends without confirmation
+- Claude drafts a specific message from stored context
+- Draft bubble with dashed border
+- Tap to open pre-filled in iMessage
+- User reviews and confirms — Ember never sends alone
 
-### Voice input (v0.9.0 — in progress)
-- Tap mic button to speak
-- SpeechKit transcribes in real time
-- Words appear in the text field as you speak
-- Tap stop or send to complete
-- Listening banner signals active recording
+### Pro tier
+- StoreKit 2 IAP — `com.watchwewin.ember.pro`
+- Manual enterprise unlock (5x logo tap)
+- Feature gating on document intelligence
+- Lock badge on gated features
 
-### Coming next
-- Voice output — Ember speaks responses (Brick C)
-- SMS surface via Twilio (Brick D)
-- Group types — social and organizational (Brick E)
+### Web demo
+- Live at **ember.watchwewin.com**
+- Cloudflare Worker proxy — API key never in browser
+- Beta waitlist capture after 3 messages
+- EmailJS transcript to explore@watchwewin.com
 
 ---
 
-## Developer quick start
+## Developer setup
 
 ### Requirements
 
 | Requirement | Version |
 |---|---|
-| macOS | Ventura 13.0 or later |
-| Xcode | 15.0 or later |
-| iOS deployment target | 17.0 or later |
+| macOS | Ventura 13.0+ |
+| Xcode | 15.0+ |
+| iOS target | 17.0+ |
 | Claude API key | console.anthropic.com |
-| Apple ID | Free — required to run on device |
+| Apple ID | Free — required for device |
 
 ### Installation
 
@@ -168,159 +183,116 @@ cd ember
 open Ember.xcodeproj
 ```
 
-### API key setup
+### API key
 
-1. Get a Claude API key at **console.anthropic.com**
-2. Right-click the **Ember** folder in Xcode → **New File from Template** → **Configuration Settings File** → name it `Config`
-3. Add one line:
+1. Get key at **console.anthropic.com**
+2. Xcode → right-click Ember folder → New File → Configuration Settings File → name `Config`
+3. Add: `CLAUDE_API_KEY = sk-ant-your-key-here`
+4. Ember project → Info tab → Configurations → Debug → Ember → select **Config.xcconfig**
 
-```
-CLAUDE_API_KEY = sk-ant-your-key-here
-```
+### Run on device
 
-4. Click the blue **Ember** project icon → **PROJECT: Ember** → **Info** tab
-5. Under **Configurations → Debug → Ember** → select **Config.xcconfig**
+Plug in iPhone → Trust → select in Xcode → Signing & Capabilities → set Team → **⌘R**
 
-Your key is excluded from Git via `.gitignore` and never transmitted except in direct HTTPS calls to the Anthropic API.
+**Wireless:** Window → Devices → Connect via Network
 
-### Run on your iPhone
-
-1. Plug in your iPhone → tap **Trust** when prompted
-2. In Xcode click the device name at top → select your iPhone
-3. Click **Ember target → Signing & Capabilities → Team** → select your Apple ID
-4. Press **⌘R**
-
-**Wireless builds:** Window → Devices and Simulators → check **Connect via Network** → unplug cable. Works over WiFi on the same network.
-
-**Untrusted Developer:** Settings → General → VPN & Device Management → tap your Apple ID → Trust → press ⌘R again.
+**Dev Pro unlock:** Tap the Ember logo 5x quickly
 
 ### Required Info.plist keys
 
-| Key | Value |
-|---|---|
-| `NSContactsUsageDescription` | To coordinate between the people in your group. |
-| `NSMicrophoneUsageDescription` | For voice input when your hands are busy. |
-| `NSSpeechRecognitionUsageDescription` | To let you talk to Ember instead of typing. |
-
----
-
-## File structure
-
 ```
-Ember/
-├── ContentView.swift        # Main UI — conversation, circle, input bar
-├── CircleStore.swift        # People persistence — ObservableObject + UserDefaults
-├── DocumentStore.swift      # Document persistence — PDF text, RAG context builder
-├── DocumentView.swift       # Document management UI — upload, tag, activate
-├── VoiceInputManager.swift  # SpeechKit — mic, transcription, permission
-├── MessageComposer.swift    # MessageUI bridge — SMS/iMessage pre-fill
-├── EmberApp.swift           # App entry point
-├── Info.plist               # Permissions and API key reference
-└── Assets.xcassets          # Icons and colors
+NSContactsUsageDescription
+→ To build context about the people in your life.
+
+NSMicrophoneUsageDescription
+→ For voice input — speak to Ember instead of typing.
+
+NSSpeechRecognitionUsageDescription
+→ To transcribe your voice into text in real time.
 ```
 
 ---
 
-## Privacy
+## App Store — v1 beta checklist
 
-### What stays on your device
-- Your coordination group and all member data
-- All relationship memory and context
-- Conversation history within sessions
-- Contact details synced from iOS Contacts
+### Before submission
 
-### What is sent to the Claude API
-Each API call sends only:
-- First names of people being discussed
-- Memory context provided through conversation
-- Your typed or spoken message
-- Active document text (when a document is activated)
-
-**No phone numbers. No full message history. No photos. No raw contact data.**
-
-### What Ember never does
-- Read iMessage or SMS content
-- Access the Photos library
-- Store data on any external server
-- Share data with third parties
-- Send messages without explicit user confirmation
-- Track usage, sessions, or engagement metrics
-
----
-
-## App Store deployment checklist
-
-### Apple Developer Program
-Enroll at **developer.apple.com/programs** — $99/year. Allow 24–48 hours for activation.
-
-### Bundle identifier
-```
-com.yourname.ember
-```
-Set in Xcode → Ember target → Signing & Capabilities. Permanent after App Store submission.
-
-### App icon sizes required
-| Size | Usage |
-|---|---|
-| 1024×1024 | App Store listing |
-| 180×180 | iPhone home screen @3x |
-| 120×120 | iPhone home screen @2x |
-| 87×87 | Spotlight @3x |
-| 80×80 | Spotlight @2x |
-
-### Privacy policy
-Required for Contacts access. Must be hosted at a permanent URL before submission. Must cover: data collected (none externally), data sent to Claude API (minimal context only), user rights (delete app = delete all data).
+- [ ] Apple Developer Program ($99/year — developer.apple.com/programs)
+- [ ] Bundle ID: `com.watchwewin.ember`
+- [ ] App icon — 1024×1024 + all sizes in Assets.xcassets
+- [ ] Launch screen configured
+- [ ] Privacy policy at permanent URL
+- [ ] StoreKit product `com.watchwewin.ember.pro` created in App Store Connect
 
 ### App Store description
+
 ```
-Ember is a group coordination platform powered by an AI agent
-that reads situations and resolves them.
+Ember is a conversational context framework with a front-end
+agent that facilitates.
 
-Add the people you coordinate with. Describe what's happening.
-Ember remembers everything, keeps track of where things stand,
-and helps you move every situation forward.
+The framework builds context through conversation — no forms,
+no profiles. It lives on your device. It persists across every
+session. The agent reads that context and acts on it.
 
-When you need to send a message, Ember drafts it — specific,
-warm, and ready to go. You review it. You send it.
+Add the people and situations that matter. Ember remembers
+everything, builds a picture over time, and helps you act
+with specificity when the moment comes.
 
-Upload documents and your group can ask questions about them
-in plain language. Ember answers from the actual content.
+Upload a document. Clients ask questions via text.
+Ember answers from the actual file.
 
-Your data stays on your device. No ads. No central database.
+Voice input. SMS drafting. Group threads.
+Patent-pending personalization architecture.
+No central database. No ads. No engagement metrics.
+
+Your context stays yours.
 ```
 
-### TestFlight beta setup
-1. App Store Connect → your app → TestFlight
-2. Wait for build processing (~30 minutes)
-3. Add External Testers → enter email addresses (up to 10,000)
-4. Testers install TestFlight → install Ember
-5. Apple review for external testers: 1–2 days first submission
+### TestFlight
+
+1. Product → Archive → Distribute App → App Store Connect
+2. TestFlight → wait for build processing (~30 min)
+3. Add External Testers → enter emails → Apple review (1-2 days)
 
 ### Common rejection reasons
+
 | Reason | Fix |
 |---|---|
-| Missing privacy policy URL | Add before submitting |
-| Contacts permission not justified | Make `NSContactsUsageDescription` specific |
+| Missing privacy policy | Add URL before submitting |
+| Contacts permission vague | State user benefit specifically |
+| IAP not configured | Create product in App Store Connect before archiving |
 | Crashes during review | Test on real device before submitting |
-| Microphone permission not justified | Make `NSMicrophoneUsageDescription` specific |
+
+---
+
+## Distribution roadmap (Brick D)
+
+Three surfaces. Two storage layers. Freemium pricing.
+
+**Surfaces:** SMS (Twilio) + Email (Gmail API) + iOS app
+
+**Storage:** Gmail for consumers (user owns it) / Supabase for enterprise
+
+**Pricing:**
+
+| Tier | Price | Included |
+|---|---|---|
+| Free | $0 | 50 messages/month, circle, memory, SMS drafting |
+| Pro | $9.99/mo | Unlimited messages, documents, voice, groups |
+| Enterprise | $49+/mo | Dedicated Twilio number, Supabase storage, admin dashboard |
+
+**Economics per user/month:**
+- Free user: ~$0.40–0.60 cost
+- Pro user: ~$2–4 cost → $9.99 price → ~$6–8 margin
+- Enterprise: ~$49+ almost pure margin
 
 ---
 
 ## Business model
 
-### Framework licensing (B2B)
-| Tier | Target | Model |
-|---|---|---|
-| **Open Core** | Individual developers | Free. MIT license. Attribution required. |
-| **Commercial** | Startups | Annual license. No attribution requirement. Support included. |
-| **Enterprise** | Large organizations | Custom pricing. SLA. Private deployment. Regulated industry package. |
+**Framework (B2B):** Open Core (MIT, free) → Commercial license → Enterprise (custom)
 
-### Application revenue (B2C)
-| Tier | What's included |
-|---|---|
-| **Free** | Core coordination, basic memory, text conversation |
-| **Pro** | Document intelligence, voice input/output, unlimited circle |
-| **Partner integrations** | Referral revenue when users act on partner suggestions (OpenTable, etc.) |
+**Application (B2C):** Free → Pro → Partner integrations (referral revenue)
 
 ---
 
@@ -328,28 +300,29 @@ Your data stays on your device. No ads. No central database.
 
 The personalization architecture described in this repository is the subject of a pending patent application.
 
-**Core claim:** A method and system for building, maintaining, and transporting individual AI context models through conversational interfaces, without requiring centralized data storage, wherein context is constructed incrementally from natural language interaction, stored locally at the point of interaction, and made available across heterogeneous interface surfaces through a portable context transport protocol.
+**Core claim:** A method and system for building, maintaining, and transporting individual AI context models through conversational interfaces, without requiring centralized data storage, wherein context is constructed incrementally from natural language interaction and made available across heterogeneous interface surfaces through a portable context transport protocol.
 
-Use of the framework under the MIT license does not grant any rights to the underlying patent claims.
+Use under MIT license does not grant rights to underlying patent claims.
 
 ---
 
-## Contributing
+## Privacy
 
-Every significant decision in the codebase is documented with a `// LESSON:` comment connecting the technical pattern to a product reason.
+**On device:** Circle, groups, memory summaries, conversation history, contacts, documents.
 
-Good first contributions: new surface adapters, memory engine improvements, drift signal algorithms, localisation, accessibility, integration partners.
+**Sent to Claude API per call:** First names, memory summaries, your message, active document text. No phone numbers. No raw history. No photos.
 
-Open an issue before a large PR. Read the existing `// LESSON:` comments first — they document the decisions already made.
+**Never:** iMessage content, Photos, external server storage, third-party sharing, autonomous sending.
 
 ---
 
 ## Licence
 
-**Ember Framework** — MIT. Attribution required for open-source use.
+**Ember Framework** — MIT. Attribution required.
 **Ember Application** — Proprietary.
 **Patent pending.**
 
 ---
 
-*Built on Claude API by Anthropic. Patent pending. v0.8.0*
+*ember — conversational context framework — patent pending*
+*built by WatchWeWin — v1.0.0-beta — April 2026*
