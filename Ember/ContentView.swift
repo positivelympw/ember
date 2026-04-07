@@ -1,15 +1,34 @@
 // ContentView.swift
-// Ember — Personal Circle + Document Intelligence + SMS Drafting
+// Ember — Group Coordination Platform
+//
+// ============================================================
+// WHAT EMBER IS NOW
+// ============================================================
+// Ember is a conversational coordination platform for groups.
+//
+// Two surfaces:
+//   Social groups — friends booking reservations, planning
+//   events, coordinating logistics via conversation + SMS
+//
+//   Organizations — teams collaborating, negotiating,
+//   managing documents, tracking decisions
+//
+// Agent persona: organization leader.
+// Empathetic and action-oriented.
+// Always resolves a situation.
+// Never leaves a thread open.
+// ============================================================
 
 import SwiftUI
 import Contacts
 import MessageUI
+import Speech
+import AVFoundation
 
 // ============================================================
 // LESSON: struct Message
 // Blueprint for one chat bubble.
-// isDraft: true means Ember wrote this to send via SMS —
-// it gets a dashed border and a Send via Messages button.
+// isDraft: true = Ember wrote this to send via SMS.
 // ============================================================
 struct Message: Identifiable {
     let id = UUID()
@@ -21,7 +40,7 @@ struct Message: Identifiable {
 // ============================================================
 // LESSON: struct Contact
 // Lightweight copy of a CNContact from iOS.
-// Only the three fields we need — id, name, phone.
+// Only the three fields we need.
 // ============================================================
 struct Contact: Identifiable {
     let id: String
@@ -30,18 +49,60 @@ struct Contact: Identifiable {
 }
 
 // ============================================================
+// LESSON: Group — a named collection of circle members
+// Groups are how Ember handles coordination for multiple
+// people at once. A group can be "Saturday dinner crew"
+// or "Q2 product team" — same data model, different context.
+// ============================================================
+struct EmberGroup: Identifiable, Codable {
+    let id: String
+    var name: String
+    var memberIDs: [String]
+    var context: String       // What this group is about
+    var lastActivity: Date
+    var groupType: GroupType
+
+    init(id: String = UUID().uuidString,
+         name: String,
+         memberIDs: [String] = [],
+         context: String = "",
+         groupType: GroupType = .social) {
+        self.id = id
+        self.name = name
+        self.memberIDs = memberIDs
+        self.context = context
+        self.lastActivity = Date()
+        self.groupType = groupType
+    }
+}
+
+enum GroupType: String, Codable, CaseIterable {
+    case social       = "social"         // Friends, family, social planning
+    case organization = "organization"   // Teams, companies, professional
+
+    var icon: String {
+        switch self {
+        case .social:       return "person.3"
+        case .organization: return "building.2"
+        }
+    }
+
+    var label: String {
+        switch self {
+        case .social:       return "Social"
+        case .organization: return "Organization"
+        }
+    }
+}
+
+// ============================================================
 // MAIN VIEW
 // ============================================================
 
 struct ContentView: View {
 
-    // ============================================================
-    // LESSON: @State — local view memory
-    // Every @State change triggers a view redraw.
-    // Core SwiftUI loop: user acts → state changes → view redraws.
-    // ============================================================
     @State private var messages: [Message] = [
-        Message(text: "Who's on your mind?", isFromUser: false)
+        Message(text: "What needs to get done?", isFromUser: false)
     ]
     @State private var inputText: String = ""
     @State private var isThinking: Bool = false
@@ -50,30 +111,27 @@ struct ContentView: View {
     @State private var showingDocuments: Bool = false
     @State private var contacts: [Contact] = []
     @State private var selectedContact: CircleMember? = nil
+    @State private var selectedGroup: EmberGroup? = nil
     @State private var showingComposer: Bool = false
     @State private var draftedMessage: String = ""
 
     // ============================================================
-    // LESSON: @StateObject
-    // For ObservableObject class instances.
-    // Creates once, keeps alive for the life of the view.
-    // @State would recreate on every redraw — wrong for classes.
+    // LESSON: @StateObject for persistent stores
+    // Each store owns one domain of data.
+    // CircleStore: individual people
+    // DocumentStore: uploaded documents
+    // VoiceInputManager: microphone and transcription
     // ============================================================
     @StateObject private var circleStore = CircleStore()
     @StateObject private var documentStore = DocumentStore()
+    @StateObject private var voiceManager = VoiceInputManager()
 
-    // API key loaded securely from Config.xcconfig via Info.plist
     let apiKey = Bundle.main.object(forInfoDictionaryKey: "CLAUDE_API_KEY") as? String ?? ""
 
     var body: some View {
         VStack(spacing: 0) {
             headerBar
 
-            // ============================================================
-            // LESSON: Conditional rendering
-            // SwiftUI evaluates these flags and renders the matching view.
-            // When a flag flips, the view swaps automatically.
-            // ============================================================
             if showingCircle {
                 circleView
             } else if showingDocuments {
@@ -87,25 +145,16 @@ struct ContentView: View {
         }
         .background(Color(red: 0.96, green: 0.95, blue: 0.93))
         .ignoresSafeArea(edges: .bottom)
-        // Tap anywhere to dismiss keyboard
         .onTapGesture {
             UIApplication.shared.sendAction(
                 #selector(UIResponder.resignFirstResponder),
                 to: nil, from: nil, for: nil
             )
         }
-        // ============================================================
-        // LESSON: .onAppear
-        // Runs every time the view appears — launch and foreground.
-        // Silently refreshes contacts if permission already granted.
-        // ============================================================
         .onAppear {
             let status = CNContactStore.authorizationStatus(for: .contacts)
-            if status == .authorized {
-                loadContacts()
-            }
+            if status == .authorized { loadContacts() }
         }
-        // Contact picker sheet
         .sheet(isPresented: $showingContactPicker) {
             ContactPickerView(
                 contacts: contacts,
@@ -124,13 +173,6 @@ struct ContentView: View {
                 }
             )
         }
-        // ============================================================
-        // LESSON: SMS composer sheet
-        // MessageComposerView is a UIViewControllerRepresentable —
-        // it wraps Apple's native MFMessageComposeViewController.
-        // The user sees a pre-filled Messages draft and taps Send.
-        // Ember never sends without explicit user confirmation.
-        // ============================================================
         .sheet(isPresented: $showingComposer) {
             if let contact = selectedContact, !contact.phone.isEmpty {
                 MessageComposerView(
@@ -148,7 +190,7 @@ struct ContentView: View {
                         break
                     case .failed:
                         messages.append(Message(
-                            text: "Something went wrong sending. Try again?",
+                            text: "Couldn't send. Try again?",
                             isFromUser: false
                         ))
                     @unknown default:
@@ -183,7 +225,7 @@ struct ContentView: View {
             Spacer()
 
             HStack(spacing: 16) {
-                // Circle toggle with member count badge
+                // People / circle toggle
                 Button {
                     withAnimation(.spring(response: 0.3)) {
                         showingCircle.toggle()
@@ -206,7 +248,7 @@ struct ContentView: View {
                     }
                 }
 
-                // Documents toggle with doc count badge
+                // Documents toggle
                 Button {
                     withAnimation(.spring(response: 0.3)) {
                         showingDocuments.toggle()
@@ -229,10 +271,8 @@ struct ContentView: View {
                     }
                 }
 
-                // Add contact button
-                Button {
-                    requestContactsAndShow()
-                } label: {
+                // Add contact
+                Button { requestContactsAndShow() } label: {
                     Image(systemName: "plus.circle")
                         .font(.system(size: 20))
                         .foregroundColor(Color(red: 0.5, green: 0.47, blue: 0.87))
@@ -248,12 +288,21 @@ struct ContentView: View {
     var circleView: some View {
         ScrollView {
             VStack(spacing: 0) {
+                // ============================================================
+                // Group context header
+                // Shows the active group at top of circle view.
+                // Ember coordinates between people in the group.
+                // ============================================================
+                if let group = selectedGroup {
+                    GroupContextBar(group: group) {
+                        selectedGroup = nil
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.top, 12)
+                    .padding(.bottom, 4)
+                }
+
                 if circleStore.members.isEmpty {
-                    // ============================================================
-                    // LESSON: Empty state
-                    // Never show a blank screen. Guide the user to the action
-                    // that fills it. Every list needs an empty state.
-                    // ============================================================
                     VStack(spacing: 16) {
                         Image(systemName: "person.2")
                             .font(.system(size: 48))
@@ -261,10 +310,10 @@ struct ContentView: View {
                                 Color(red: 0.5, green: 0.47, blue: 0.87).opacity(0.3)
                             )
                             .padding(.top, 60)
-                        Text("Your circle is empty")
+                        Text("No one here yet")
                             .font(.system(size: 18, weight: .medium))
                             .foregroundColor(Color(red: 0.1, green: 0.1, blue: 0.09))
-                        Text("Tap + to add the people\nEmber pays attention to.")
+                        Text("Tap + to add people.\nEmber coordinates between them.")
                             .font(.system(size: 15))
                             .foregroundColor(.gray)
                             .multilineTextAlignment(.center)
@@ -300,7 +349,7 @@ struct ContentView: View {
         ScrollViewReader { proxy in
             ScrollView {
                 LazyVStack(spacing: 8) {
-                    // Active person context bar
+                    // Active person bar
                     if let person = selectedContact {
                         ActivePersonBar(
                             member: person,
@@ -311,13 +360,20 @@ struct ContentView: View {
                         .padding(.top, 8)
                     }
 
-                    // Active document context bar
+                    // Active document banner
                     if let doc = documentStore.activeDocument {
                         ActiveDocumentBanner(document: doc) {
                             documentStore.activeDocument = nil
                         }
                         .padding(.horizontal, 16)
                         .padding(.top, selectedContact == nil ? 8 : 4)
+                    }
+
+                    // Voice listening indicator
+                    if voiceManager.isListening {
+                        VoiceListeningBanner()
+                            .padding(.horizontal, 16)
+                            .padding(.top, 4)
                     }
 
                     ForEach(messages) { message in
@@ -352,7 +408,7 @@ struct ContentView: View {
 
     var inputBar: some View {
         VStack(spacing: 0) {
-            // Quick-access pill strip — circle members
+            // Quick-access pill strip
             if !circleStore.members.isEmpty && !showingCircle && !showingDocuments {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 8) {
@@ -388,12 +444,13 @@ struct ContentView: View {
 
             HStack(alignment: .bottom, spacing: 10) {
                 // ============================================================
-                // LESSON: Two ways to send
-                // .onSubmit fires on return key press.
-                // Button fires on tap. Both call sendMessage().
-                // Two paths, one action — good mobile UX.
+                // LESSON: Single input field for text and voice
+                // Voice transcription feeds the same TextField as typing.
+                // One field. Two input methods. Same send action.
+                // The .onChange syncs voiceManager.transcribedText
+                // into inputText as the user speaks.
                 // ============================================================
-                TextField("Say something...", text: $inputText, axis: .vertical)
+                TextField("What needs to get done?", text: $inputText, axis: .vertical)
                     .font(.system(size: 16))
                     .lineLimit(1...5)
                     .padding(.horizontal, 14)
@@ -401,7 +458,51 @@ struct ContentView: View {
                     .background(Color.white)
                     .clipShape(RoundedRectangle(cornerRadius: 22))
                     .onSubmit { sendMessage() }
+                    .onChange(of: voiceManager.transcribedText) { newText in
+                        if voiceManager.isListening {
+                            inputText = newText
+                        }
+                    }
 
+                // ============================================================
+                // LESSON: Mic button with pulse animation
+                // Red pulsing when active — clear signal to the user
+                // that the microphone is live and recording.
+                // Purple mic when idle — matches the app's visual language.
+                // ============================================================
+                Button {
+                    if voiceManager.isListening {
+                        voiceManager.stopListening()
+                    } else {
+                        voiceManager.requestPermissions { granted in
+                            if granted {
+                                voiceManager.startListening()
+                            } else {
+                                messages.append(Message(
+                                    text: "To use voice, go to Settings → Ember → allow Microphone and Speech Recognition.",
+                                    isFromUser: false
+                                ))
+                            }
+                        }
+                    }
+                } label: {
+                    Image(systemName: voiceManager.isListening
+                          ? "stop.circle.fill"
+                          : "mic.circle.fill")
+                        .font(.system(size: 32))
+                        .foregroundColor(voiceManager.isListening
+                                         ? .red
+                                         : Color(red: 0.5, green: 0.47, blue: 0.87))
+                        .scaleEffect(voiceManager.isListening ? 1.15 : 1.0)
+                        .animation(
+                            voiceManager.isListening
+                                ? .easeInOut(duration: 0.5).repeatForever(autoreverses: true)
+                                : .spring(),
+                            value: voiceManager.isListening
+                        )
+                }
+
+                // Send button
                 Button { sendMessage() } label: {
                     Image(systemName: "arrow.up.circle.fill")
                         .font(.system(size: 32))
@@ -425,26 +526,19 @@ struct ContentView: View {
 
     // MARK: SMS drafting
 
-    // ============================================================
-    // LESSON: Drafting with Claude then sending via SMS
-    // We ask Claude to write a message using stored memory.
-    // The draft appears as a special bubble — dashed border,
-    // Send via Messages button underneath.
-    // The user reviews and confirms. Ember never sends alone.
-    // ============================================================
     func draftMessageFor(_ member: CircleMember) {
         isThinking = true
         Task {
             let memory = buildMemoryContext(for: member)
             let prompt = """
-                Draft a short, warm text message from the user to \(member.name).
+                Draft a short, direct message from the user to \(member.name).
                 \(memory)
                 Rules:
-                - Sound like a real person, not an app
-                - Reference something specific if context exists
+                - Sound like a decisive leader, not an app
+                - Reference the specific situation if context exists
                 - One or two sentences maximum
-                - No emojis unless it feels completely natural
-                - Do not start with "Hey" — be more specific
+                - Action-oriented — move something forward
+                - Do not start with "Hey"
                 Return only the message text. Nothing else.
                 """
             let draft = await askClaude(prompt, history: [])
@@ -479,11 +573,12 @@ struct ContentView: View {
         Task {
             let memory = buildMemoryContext(for: member)
             let prompt = """
-                The user wants to think about \(member.name).
+                The user is focusing on \(member.name).
                 \(memory)
-                Greet naturally — reference something specific if context
-                exists, otherwise ask one warm question.
-                Two sentences maximum.
+                As an action-oriented organization leader:
+                acknowledge who this person is and immediately
+                ask what needs to happen with them right now.
+                Be direct and warm. Two sentences maximum.
                 """
             let reply = await askClaude(prompt, history: messages)
             isThinking = false
@@ -497,10 +592,11 @@ struct ContentView: View {
         isThinking = true
         Task {
             let prompt = """
-                The user just added \(member.name) to their personal circle.
-                Welcome this warmly and ask one specific question:
-                when did they last connect and what was it about?
-                Two sentences. Warm, not clinical.
+                \(member.name) was just added to the user's group coordination platform.
+                As an action-oriented organization leader, welcome this
+                and immediately ask: what's the active situation with \(member.name)
+                that needs to be resolved?
+                Warm but direct. Two sentences maximum.
                 """
             let reply = await askClaude(prompt, history: messages)
             isThinking = false
@@ -509,33 +605,40 @@ struct ContentView: View {
     }
 
     // ============================================================
-    // LESSON: Context assembly — the memory-as-interface pattern
-    // Everything Ember knows about a person assembles into plain
-    // English and goes into the system prompt.
-    // More context = more specific and personal the response.
-    // No scrolling needed — Ember holds the context.
+    // LESSON: Context assembly — the core of the agent
+    // All stored context assembles into plain English for Claude.
+    // The agent persona is set in askClaude's system prompt.
+    // Context here feeds specificity. Persona drives behavior.
     // ============================================================
     func buildMemoryContext(for member: CircleMember) -> String {
         var parts: [String] = []
         if !member.lastConnectedDescription.isEmpty {
-            parts.append("Last connected: \(member.lastConnectedDescription)")
+            parts.append("Last interaction: \(member.lastConnectedDescription)")
         }
         if !member.sharedContext.isEmpty {
-            parts.append("Shared context: \(member.sharedContext)")
+            parts.append("Background: \(member.sharedContext)")
         }
         if !member.currentContext.isEmpty {
-            parts.append("What's current: \(member.currentContext)")
+            parts.append("Current situation: \(member.currentContext)")
         }
-        parts.append("Alignment: \(member.driftLevel.rawValue)")
+        parts.append("Status: \(member.driftLevel.rawValue)")
         return parts.isEmpty
-            ? "No context yet — first time focusing on this person."
+            ? "No context yet on this person."
             : parts.joined(separator: ". ")
     }
 
     func buildCircleContext() -> String {
         guard !circleStore.members.isEmpty else { return "" }
         let names = circleStore.members.map { $0.firstName }.joined(separator: ", ")
-        return "The user's personal circle includes: \(names)."
+        return "People in this coordination group: \(names)."
+    }
+
+    func buildGroupContext() -> String {
+        guard let group = selectedGroup else { return "" }
+        return """
+            Active group: \(group.name) (\(group.groupType.label))
+            Group context: \(group.context.isEmpty ? "No context set." : group.context)
+            """
     }
 
     // MARK: Contacts
@@ -551,7 +654,7 @@ struct ContentView: View {
                     }
                 } else {
                     messages.append(Message(
-                        text: "To see your contacts, go to Settings → Ember → allow Contacts.",
+                        text: "To see contacts, go to Settings → Ember → allow Contacts.",
                         isFromUser: false
                     ))
                 }
@@ -559,13 +662,6 @@ struct ContentView: View {
         }
     }
 
-    // ============================================================
-    // LESSON: Background thread + main thread update
-    // Reading contacts from disk is slow — background thread.
-    // UI updates must be on main thread — always.
-    // Also syncs circle member names/phones with iOS Contacts
-    // so changes the user makes in Contacts show up here.
-    // ============================================================
     func loadContacts() {
         DispatchQueue.global(qos: .userInitiated).async {
             let store = CNContactStore()
@@ -608,6 +704,7 @@ struct ContentView: View {
     // MARK: Send message
 
     func sendMessage() {
+        if voiceManager.isListening { voiceManager.stopListening() }
         let text = inputText.trimmingCharacters(in: .whitespaces)
         guard !text.isEmpty else { return }
         messages.append(Message(text: text, isFromUser: true))
@@ -624,15 +721,19 @@ struct ContentView: View {
     // MARK: Claude API
 
     // ============================================================
-    // LESSON: Dynamic system prompt assembly
-    // The system prompt changes on every call based on:
-    //   - Who is selected (person context)
-    //   - What circle members exist (circle context)
-    //   - Which document is active (document context — RAG)
+    // LESSON: Agent persona via system prompt
+    // The system prompt defines who Ember IS in this conversation.
+    // Changing the system prompt changes the entire personality,
+    // communication style, and decision-making approach.
     //
-    // This is what makes Ember feel specific, not generic.
-    // The same Claude model powers thousands of apps — the
-    // system prompt is what makes it feel like Ember.
+    // Ember is now an organization leader:
+    //   - Empathetic: understands people and situations
+    //   - Action-oriented: always moves toward resolution
+    //   - Resolves situations: never leaves threads open
+    //
+    // This persona works for both social coordination
+    // (planning dinner with friends) and organizational use
+    // (managing a negotiation or project decision).
     // ============================================================
     func askClaude(_ userMessage: String, history: [Message]) async -> String {
         let url = URL(string: "https://api.anthropic.com/v1/messages")!
@@ -644,23 +745,39 @@ struct ContentView: View {
 
         let circleContext = buildCircleContext()
         let personContext = selectedContact.map { buildMemoryContext(for: $0) } ?? ""
+        let groupContext = buildGroupContext()
         let documentContext = documentStore.buildDocumentContext()
 
         let body: [String: Any] = [
             "model": "claude-sonnet-4-6",
             "max_tokens": 500,
             "system": """
-                You are Ember, a personal relationship agent and document intelligence assistant.
-                You help people stay close to the people who matter most to them.
-                When document context is provided below, answer questions accurately
-                from that document — be specific, reference exact figures and terms.
-                If asked about a document and none is active, ask the user to activate one
-                from the Documents section (doc icon in the header).
-                Be warm, brief, and specific. Two to three sentences maximum.
-                Never say 'reach out' or 'touch base'.
-                When you suggest something, name it concretely.
+                You are Ember — an organization leader embedded in a group coordination platform.
+
+                YOUR PERSONA:
+                Empathetic and action-oriented. You read situations accurately,
+                understand what people need, and always move toward resolution.
+                You never leave a situation open. Every response either resolves
+                something, advances it, or names exactly what needs to happen next.
+
+                YOUR USERS:
+                Social groups coordinating events, reservations, and plans.
+                Organizations collaborating, negotiating, and managing documents.
+                You serve both. The tone shifts to match — warmer for social,
+                more precise for organizational — but the resolve is always the same.
+
+                YOUR RULES:
+                - Always be specific. Name the action, the person, the next step.
+                - Never say "reach out", "touch base", or "circle back".
+                - Never leave a situation without a proposed resolution.
+                - Be brief. Two to three sentences unless a document requires more.
+                - When document context is provided, answer from it precisely.
+                - When coordinating a group, name who needs to do what.
+
+                CONTEXT:
                 \(circleContext)
                 \(personContext)
+                \(groupContext)
                 \(documentContext)
                 """,
             "messages": history.map { msg in
@@ -686,10 +803,86 @@ struct ContentView: View {
 }
 
 // ============================================================
+// GROUP CONTEXT BAR
+// Shows the active group at top of circle view.
+// ============================================================
+struct GroupContextBar: View {
+    let group: EmberGroup
+    let onDismiss: () -> Void
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Image(systemName: group.groupType.icon)
+                .font(.system(size: 12))
+                .foregroundColor(Color(red: 0.5, green: 0.47, blue: 0.87))
+            Text(group.name)
+                .font(.system(size: 13, weight: .medium))
+                .foregroundColor(Color(red: 0.1, green: 0.1, blue: 0.09))
+            if !group.context.isEmpty {
+                Text("· \(group.context)")
+                    .font(.system(size: 13))
+                    .foregroundColor(.gray)
+                    .lineLimit(1)
+            }
+            Spacer()
+            Button(action: onDismiss) {
+                Image(systemName: "xmark")
+                    .font(.system(size: 11))
+                    .foregroundColor(.gray)
+            }
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 8)
+        .background(Color.white)
+        .clipShape(RoundedRectangle(cornerRadius: 10))
+    }
+}
+
+// ============================================================
+// VOICE LISTENING BANNER
+// Shows in the conversation while the mic is active.
+// Animated dots signal that Ember is hearing the user.
+// ============================================================
+struct VoiceListeningBanner: View {
+    @State private var animating = false
+
+    var body: some View {
+        HStack(spacing: 10) {
+            HStack(spacing: 4) {
+                ForEach(0..<3, id: \.self) { i in
+                    RoundedRectangle(cornerRadius: 2)
+                        .fill(Color.red)
+                        .frame(width: 3, height: animating ? 14 : 6)
+                        .animation(
+                            .easeInOut(duration: 0.4)
+                                .repeatForever(autoreverses: true)
+                                .delay(Double(i) * 0.15),
+                            value: animating
+                        )
+                }
+            }
+            .frame(height: 16)
+
+            Text("Listening...")
+                .font(.system(size: 13, weight: .medium))
+                .foregroundColor(.red)
+
+            Spacer()
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 8)
+        .background(Color.red.opacity(0.05))
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(Color.red.opacity(0.2), lineWidth: 0.5)
+        )
+        .onAppear { animating = true }
+    }
+}
+
+// ============================================================
 // ACTIVE DOCUMENT BANNER
-// Shows in the conversation when a document is active.
-// Tells the user Ember is reading from that document.
-// Dismiss to deactivate.
 // ============================================================
 struct ActiveDocumentBanner: View {
     let document: EmberDocument
@@ -700,7 +893,6 @@ struct ActiveDocumentBanner: View {
             Image(systemName: document.documentType.icon)
                 .font(.system(size: 12))
                 .foregroundColor(Color(red: 0.5, green: 0.47, blue: 0.87))
-
             VStack(alignment: .leading, spacing: 1) {
                 Text("Reading \(document.documentType.displayName.lowercased())")
                     .font(.system(size: 12, weight: .medium))
@@ -710,9 +902,7 @@ struct ActiveDocumentBanner: View {
                     .foregroundColor(.gray)
                     .lineLimit(1)
             }
-
             Spacer()
-
             Button(action: onDismiss) {
                 Image(systemName: "xmark")
                     .font(.system(size: 10))
@@ -732,9 +922,6 @@ struct ActiveDocumentBanner: View {
 
 // ============================================================
 // CIRCLE MEMBER ROW
-// One person in the circle list.
-// Tap to focus Ember on them. Minus to remove with confirmation.
-// Drift dot shows alignment status at a glance.
 // ============================================================
 struct CircleMemberRow: View {
     let member: CircleMember
@@ -756,7 +943,6 @@ struct CircleMemberRow: View {
                     .frame(width: 12, height: 12)
                     .overlay(Circle().stroke(Color.white, lineWidth: 2))
             }
-
             VStack(alignment: .leading, spacing: 3) {
                 Text(member.name)
                     .font(.system(size: 16))
@@ -767,14 +953,12 @@ struct CircleMemberRow: View {
                         .foregroundColor(.gray)
                         .lineLimit(1)
                 } else {
-                    Text("Tap to start")
+                    Text("Tap to coordinate")
                         .font(.system(size: 13))
                         .foregroundColor(Color(red: 0.5, green: 0.47, blue: 0.87).opacity(0.5))
                 }
             }
-
             Spacer()
-
             Button { showingConfirm = true } label: {
                 Image(systemName: "minus.circle")
                     .font(.system(size: 22))
@@ -785,13 +969,8 @@ struct CircleMemberRow: View {
         .padding(.vertical, 12)
         .contentShape(Rectangle())
         .onTapGesture { onSelect() }
-        // ============================================================
-        // LESSON: .confirmationDialog
-        // Always confirm destructive actions.
-        // role: .destructive makes the button red automatically.
-        // ============================================================
         .confirmationDialog(
-            "Remove \(member.firstName) from your circle?",
+            "Remove \(member.firstName)?",
             isPresented: $showingConfirm,
             titleVisibility: .visible
         ) {
@@ -803,8 +982,6 @@ struct CircleMemberRow: View {
 
 // ============================================================
 // ACTIVE PERSON BAR
-// Shows at top of conversation — who Ember is focused on.
-// Draft button opens SMS drafting flow.
 // ============================================================
 struct ActivePersonBar: View {
     let member: CircleMember
@@ -816,21 +993,16 @@ struct ActivePersonBar: View {
             Circle()
                 .fill(member.driftLevel.color.opacity(0.3))
                 .frame(width: 8, height: 8)
-
-            Text("Thinking about \(member.firstName)")
+            Text("Coordinating with \(member.firstName)")
                 .font(.system(size: 13, weight: .medium))
                 .foregroundColor(Color(red: 0.1, green: 0.1, blue: 0.09))
-
             if !member.lastConnectedDescription.isEmpty {
                 Text("· \(member.lastConnectedDescription)")
                     .font(.system(size: 13))
                     .foregroundColor(.gray)
                     .lineLimit(1)
             }
-
             Spacer()
-
-            // Draft button — only if SMS is available on this device
             if MFMessageComposeViewController.canSendText() {
                 Button(action: onDraft) {
                     HStack(spacing: 4) {
@@ -846,7 +1018,6 @@ struct ActivePersonBar: View {
                     .clipShape(Capsule())
                 }
             }
-
             Button(action: onDismiss) {
                 Image(systemName: "xmark")
                     .font(.system(size: 11))
@@ -862,9 +1033,6 @@ struct ActivePersonBar: View {
 
 // ============================================================
 // CONTACT PICKER VIEW
-// Slides up as a sheet.
-// Search filters in real time. Pull to refresh from iOS Contacts.
-// Checkmark on contacts already in circle.
 // ============================================================
 struct ContactPickerView: View {
     let contacts: [Contact]
@@ -916,7 +1084,7 @@ struct ContactPickerView: View {
             .listStyle(.plain)
             .refreshable { await onRefresh() }
             .searchable(text: $searchText, prompt: "Search contacts")
-            .navigationTitle("Add to your circle")
+            .navigationTitle("Add to group")
             .navigationBarTitleDisplayMode(.inline)
         }
     }
@@ -924,8 +1092,6 @@ struct ContactPickerView: View {
 
 // ============================================================
 // MESSAGE BUBBLE
-// Purple right = user. White left = Ember.
-// Draft bubbles get dashed border + Send via Messages button.
 // ============================================================
 struct MessageBubble: View {
     let message: Message
@@ -943,9 +1109,7 @@ struct MessageBubble: View {
                             .frame(width: 8, height: 8)
                     )
             }
-
             if message.isFromUser { Spacer(minLength: 60) }
-
             VStack(alignment: .leading, spacing: 6) {
                 Text(message.text)
                     .font(.system(size: 16))
@@ -971,15 +1135,6 @@ struct MessageBubble: View {
                                 )
                             : nil
                     )
-
-                // ============================================================
-                // LESSON: Conditional Send button
-                // Three conditions must all be true:
-                //   1. This is a draft bubble
-                //   2. onSend closure was passed in
-                //   3. This device can send messages
-                // All three protect against accidental sends.
-                // ============================================================
                 if message.isDraft,
                    let onSend,
                    MFMessageComposeViewController.canSendText() {
@@ -999,7 +1154,6 @@ struct MessageBubble: View {
                     .padding(.leading, 4)
                 }
             }
-
             if !message.isFromUser { Spacer(minLength: 60) }
         }
     }
@@ -1007,8 +1161,6 @@ struct MessageBubble: View {
 
 // ============================================================
 // TYPING INDICATOR
-// Three dots wave while Ember thinks.
-// One @State drives all three — staggered delay creates wave.
 // ============================================================
 struct TypingIndicator: View {
     @State private var animatingDot = 0
@@ -1049,8 +1201,6 @@ struct TypingIndicator: View {
 
 // ============================================================
 // STRING EXTENSION
-// .initials and .firstName work on any String in the app.
-// One definition, used everywhere — no duplication.
 // ============================================================
 extension String {
     var initials: String {
