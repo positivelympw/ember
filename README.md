@@ -1,6 +1,6 @@
 # Ember
 
-> *A patent-pending conversational context framework — not a group coordination agent.*
+> *A patent-pending conversational context framework.*
 
 **v1.0.0-beta — April 2026**
 
