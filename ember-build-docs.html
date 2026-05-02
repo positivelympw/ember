@@ -1,0 +1,1834 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ember — Build Documentation</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0e0d0b;
+    --teal: #2ec4b6;
+    --ember: #e84d1c;
+    --warm: #F7F5F0;
+    --mid: #d4d0c8;
+    --dim: #6b6760;
+    --card: #ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--warm);
+    color: var(--ink);
+    font-size: 15px;
+    line-height: 1.65;
+  }
+
+  /* ─── NAV ─────────────────────────────────────── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: var(--ink);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 40px;
+    border-bottom: 1px solid rgba(255,255,255,0.07);
+  }
+
+  .nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ember-dot {
+    position: relative;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ember-dot::before {
+    content: '';
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 1px solid rgba(46,196,182,0.3);
+  }
+  .ember-dot::after {
+    content: '';
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    border: 1px solid rgba(46,196,182,0.6);
+  }
+  .ember-dot span {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--teal);
+    display: block;
+  }
+
+  .nav-title {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    color: white;
+    letter-spacing: 0.01em;
+  }
+
+  .nav-badge {
+    font-size: 9px;
+    font-weight: 700;
+    color: var(--ink);
+    background: var(--teal);
+    padding: 2px 6px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+  }
+
+  .nav-meta {
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* ─── HERO ────────────────────────────────────── */
+  .hero {
+    background: var(--ink);
+    padding: 72px 40px 60px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 20px;
+  }
+
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 5vw, 58px);
+    font-weight: 700;
+    color: white;
+    line-height: 1.1;
+    max-width: 700px;
+    margin-bottom: 18px;
+  }
+
+  .hero h1 em {
+    color: var(--teal);
+    font-style: italic;
+  }
+
+  .hero-desc {
+    font-size: 16px;
+    color: rgba(255,255,255,0.5);
+    max-width: 520px;
+    line-height: 1.7;
+    margin-bottom: 36px;
+  }
+
+  .hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .tag {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    padding: 5px 12px;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .tag-outline { border: 1px solid rgba(255,255,255,0.15); color: rgba(255,255,255,0.45); }
+  .tag-teal { background: rgba(46,196,182,0.12); color: var(--teal); border: 1px solid rgba(46,196,182,0.2); }
+  .tag-ember { background: rgba(232,77,28,0.12); color: var(--ember); border: 1px solid rgba(232,77,28,0.2); }
+
+  /* ─── LAYOUT ──────────────────────────────────── */
+  .layout {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    min-height: calc(100vh - 120px);
+    max-width: 1280px;
+    margin: 0 auto;
+  }
+
+  /* ─── SIDEBAR ─────────────────────────────────── */
+  aside {
+    padding: 32px 0 32px 40px;
+    position: sticky;
+    top: 57px;
+    height: calc(100vh - 57px);
+    overflow-y: auto;
+    border-right: 1px solid var(--mid);
+  }
+
+  .sidebar-section {
+    margin-bottom: 28px;
+  }
+
+  .sidebar-label {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 8px;
+    padding-left: 2px;
+  }
+
+  .sidebar-nav {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .sidebar-nav a {
+    display: block;
+    font-size: 13px;
+    color: var(--dim);
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    transition: all 0.15s;
+    border-left: 2px solid transparent;
+  }
+
+  .sidebar-nav a:hover {
+    color: var(--ink);
+    background: white;
+    border-left-color: var(--teal);
+  }
+
+  /* ─── MAIN ────────────────────────────────────── */
+  main {
+    padding: 40px 48px 80px;
+  }
+
+  /* ─── SECTIONS ────────────────────────────────── */
+  .doc-section {
+    margin-bottom: 72px;
+  }
+
+  .section-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 8px;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+
+  .section-sub {
+    font-size: 14px;
+    color: var(--dim);
+    margin-bottom: 28px;
+    max-width: 600px;
+  }
+
+  /* ─── ARCHITECTURE DIAGRAM ────────────────────── */
+  .arch-diagram {
+    background: var(--ink);
+    border-radius: 12px;
+    padding: 36px;
+    margin-bottom: 28px;
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    overflow-x: auto;
+  }
+
+  .arch-layer {
+    margin-bottom: 24px;
+  }
+
+  .arch-layer-label {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 10px;
+  }
+
+  .arch-boxes {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .arch-box {
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 12px;
+    line-height: 1.4;
+  }
+
+  .arch-box.view { background: rgba(46,196,182,0.1); border: 1px solid rgba(46,196,182,0.25); color: var(--teal); }
+  .arch-box.store { background: rgba(232,77,28,0.1); border: 1px solid rgba(232,77,28,0.25); color: #f07a56; }
+  .arch-box.service { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.12); color: rgba(255,255,255,0.6); }
+  .arch-box.model { background: rgba(150,130,255,0.08); border: 1px solid rgba(150,130,255,0.2); color: #a89ef0; }
+  .arch-box.external { background: rgba(255,255,255,0.03); border: 1px dashed rgba(255,255,255,0.15); color: rgba(255,255,255,0.35); }
+
+  .arch-arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.2);
+    font-size: 18px;
+    margin: 4px 0;
+  }
+
+  /* ─── COMPONENT CARDS ─────────────────────────── */
+  .component-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  .component-card {
+    background: var(--card);
+    border: 1px solid var(--mid);
+    border-radius: 10px;
+    overflow: hidden;
+    transition: box-shadow 0.2s;
+  }
+
+  .component-card:hover {
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+  }
+
+  .card-header {
+    padding: 16px 20px 14px;
+    border-bottom: 1px solid var(--mid);
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .card-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  .icon-view { background: rgba(46,196,182,0.1); }
+  .icon-store { background: rgba(232,77,28,0.1); }
+  .icon-service { background: rgba(0,0,0,0.05); }
+  .icon-engine { background: rgba(150,130,255,0.1); }
+
+  .card-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 2px;
+    color: var(--ink);
+  }
+
+  .card-file {
+    font-size: 11px;
+    color: var(--dim);
+    font-family: 'DM Mono', monospace;
+  }
+
+  .card-body {
+    padding: 16px 20px;
+  }
+
+  .card-desc {
+    font-size: 13.5px;
+    color: #3d3b38;
+    margin-bottom: 14px;
+    line-height: 1.6;
+  }
+
+  .card-props {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+  }
+
+  .prop-tag {
+    font-size: 10.5px;
+    font-family: 'DM Mono', monospace;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: var(--warm);
+    color: var(--dim);
+    border: 1px solid var(--mid);
+  }
+
+  .prop-tag.highlight {
+    background: rgba(46,196,182,0.06);
+    color: #1a9088;
+    border-color: rgba(46,196,182,0.2);
+  }
+
+  .prop-tag.warn {
+    background: rgba(232,77,28,0.06);
+    color: #c03a10;
+    border-color: rgba(232,77,28,0.2);
+  }
+
+  /* ─── DATA MODEL TABLE ────────────────────────── */
+  .model-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+    margin-bottom: 32px;
+  }
+
+  .model-table thead tr {
+    background: var(--ink);
+    color: white;
+  }
+
+  .model-table th {
+    padding: 10px 16px;
+    text-align: left;
+    font-weight: 500;
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  .model-table th:first-child { border-radius: 8px 0 0 0; }
+  .model-table th:last-child  { border-radius: 0 8px 0 0; }
+
+  .model-table td {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--mid);
+    vertical-align: top;
+  }
+
+  .model-table tr:last-child td { border-bottom: none; }
+  .model-table tr:nth-child(even) td { background: rgba(0,0,0,0.015); }
+
+  .model-table td:first-child {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: #1a9088;
+    white-space: nowrap;
+  }
+
+  .model-table td:nth-child(2) {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--dim);
+  }
+
+  /* ─── BUILD LOG ───────────────────────────────── */
+  .build-log {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .build-row {
+    display: grid;
+    grid-template-columns: 60px 80px 1fr 120px;
+    align-items: center;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--mid);
+    background: var(--card);
+    transition: background 0.12s;
+    gap: 16px;
+  }
+
+  .build-row:first-child { border-radius: 10px 10px 0 0; }
+  .build-row:last-child  { border-bottom: none; border-radius: 0 0 10px 10px; }
+  .build-row:hover { background: #faf9f7; }
+
+  .build-brick {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--dim);
+  }
+
+  .build-version {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .build-what {
+    font-size: 13.5px;
+    color: #3d3b38;
+  }
+
+  .status-dot {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+  }
+
+  .dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .dot-done    { background: #3ecf8e; }
+  .dot-planned { background: #f5a623; }
+  .dot-future  { background: #c4b8f0; }
+  .dot-horizon { background: rgba(0,0,0,0.15); }
+
+  /* ─── CODE BLOCK ──────────────────────────────── */
+  pre {
+    background: var(--ink);
+    color: rgba(255,255,255,0.75);
+    border-radius: 10px;
+    padding: 22px 26px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12.5px;
+    line-height: 1.75;
+    overflow-x: auto;
+    margin-bottom: 20px;
+  }
+
+  pre .k  { color: #f07a56; }
+  pre .s  { color: var(--teal); }
+  pre .c  { color: rgba(255,255,255,0.3); }
+  pre .t  { color: #c4b8f0; }
+
+  /* ─── COMMAND TABLE ───────────────────────────── */
+  .cmd-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 10px;
+  }
+
+  .cmd-card {
+    background: var(--card);
+    border: 1px solid var(--mid);
+    border-radius: 8px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .cmd-name {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--ember);
+    font-weight: 500;
+  }
+
+  .cmd-desc {
+    font-size: 13px;
+    color: var(--dim);
+  }
+
+  /* ─── FLOW DIAGRAM ────────────────────────────── */
+  .flow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .flow-step {
+    background: var(--card);
+    border: 1px solid var(--mid);
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    color: var(--ink);
+  }
+
+  .flow-step.active {
+    background: var(--ink);
+    color: var(--teal);
+    border-color: var(--ink);
+  }
+
+  .flow-arrow {
+    color: var(--mid);
+    font-size: 18px;
+  }
+
+  /* ─── PRICING TABLE ───────────────────────────── */
+  .pricing-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 20px;
+  }
+
+  .pricing-card {
+    background: var(--card);
+    border: 1px solid var(--mid);
+    border-radius: 10px;
+    padding: 24px;
+  }
+
+  .pricing-card.featured {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: white;
+  }
+
+  .pricing-tier {
+    font-size: 11px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 8px;
+  }
+
+  .pricing-card.featured .pricing-tier { color: var(--teal); }
+
+  .pricing-price {
+    font-family: 'Playfair Display', serif;
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .pricing-card.featured .pricing-price { color: white; }
+
+  .pricing-period {
+    font-size: 12px;
+    color: var(--dim);
+    margin-bottom: 16px;
+  }
+
+  .pricing-card.featured .pricing-period { color: rgba(255,255,255,0.4); }
+
+  .pricing-features {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .pricing-features li {
+    font-size: 13px;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    color: #3d3b38;
+  }
+
+  .pricing-card.featured .pricing-features li { color: rgba(255,255,255,0.65); }
+
+  .pricing-features li::before {
+    content: '→';
+    color: var(--teal);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    margin-top: 2px;
+    flex-shrink: 0;
+  }
+
+  /* ─── DIVIDER ─────────────────────────────────── */
+  .divider {
+    border: none;
+    border-top: 1px solid var(--mid);
+    margin: 40px 0;
+  }
+
+  /* ─── CALLOUT ─────────────────────────────────── */
+  .callout {
+    border-left: 3px solid var(--teal);
+    background: rgba(46,196,182,0.04);
+    padding: 14px 18px;
+    border-radius: 0 8px 8px 0;
+    font-size: 13.5px;
+    color: #3d3b38;
+    margin-bottom: 20px;
+    line-height: 1.65;
+  }
+
+  .callout.warn {
+    border-left-color: var(--ember);
+    background: rgba(232,77,28,0.04);
+  }
+
+  /* ─── ROADMAP ─────────────────────────────────── */
+  .roadmap-phase {
+    margin-bottom: 28px;
+  }
+
+  .phase-label {
+    font-size: 10px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .phase-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--mid);
+  }
+
+  .phase-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .phase-item {
+    background: var(--card);
+    border: 1px solid var(--mid);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .phase-item .ver {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--dim);
+  }
+
+  /* ─── FOOTER ──────────────────────────────────── */
+  footer {
+    background: var(--ink);
+    padding: 32px 40px;
+    text-align: center;
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.05em;
+  }
+
+  @media (max-width: 800px) {
+    .layout { grid-template-columns: 1fr; }
+    aside { display: none; }
+    main { padding: 32px 24px 60px; }
+    .hero { padding: 48px 24px 40px; }
+    nav { padding: 14px 24px; }
+    .component-grid { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; }
+    .build-row { grid-template-columns: 1fr 1fr; }
+    .build-brick, .build-version { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-brand">
+    <div class="ember-dot"><span></span></div>
+    <span class="nav-title">ember</span>
+    <span class="nav-badge">BETA</span>
+  </div>
+  <span class="nav-meta">v1.0.0 · Build Documentation · April 2026</span>
+</nav>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-eyebrow">Build Documentation</div>
+  <h1>Ember <em>Component</em> Reference</h1>
+  <p class="hero-desc">A complete breakdown of every file, data model, view, store, and service in the Ember iOS app — built on the patent-pending conversational context framework.</p>
+  <div class="hero-tags">
+    <span class="tag tag-teal">SwiftUI · iOS 17+</span>
+    <span class="tag tag-teal">Claude API</span>
+    <span class="tag tag-ember">Patent Pending</span>
+    <span class="tag tag-outline">Xcode 15+</span>
+    <span class="tag tag-outline">StoreKit 2</span>
+    <span class="tag tag-outline">SpeechKit</span>
+    <span class="tag tag-outline">PDFKit</span>
+    <span class="tag tag-outline">MessageUI</span>
+  </div>
+</div>
+
+<!-- LAYOUT -->
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Overview</div>
+      <ul class="sidebar-nav">
+        <li><a href="#architecture">Architecture</a></li>
+        <li><a href="#data-models">Data Models</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Views</div>
+      <ul class="sidebar-nav">
+        <li><a href="#contentview">ContentView</a></li>
+        <li><a href="#circle-detail">CircleMemberDetailView</a></li>
+        <li><a href="#planview">PlanView</a></li>
+        <li><a href="#document-view">DocumentView</a></li>
+        <li><a href="#sms-surface">SMSSurfaceView</a></li>
+        <li><a href="#paywall">ProPaywallView</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Stores</div>
+      <ul class="sidebar-nav">
+        <li><a href="#circle-store">CircleStore</a></li>
+        <li><a href="#group-store">GroupStore</a></li>
+        <li><a href="#memory-store">MemoryStore</a></li>
+        <li><a href="#document-store">DocumentStore</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Services</div>
+      <ul class="sidebar-nav">
+        <li><a href="#voice">VoiceInputManager</a></li>
+        <li><a href="#pro">ProManager</a></li>
+        <li><a href="#draft-engine">DraftEngine</a></li>
+        <li><a href="#ember-cards">EmberCards</a></li>
+        <li><a href="#search">EmberSearchMode</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Build</div>
+      <ul class="sidebar-nav">
+        <li><a href="#build-log">Build Log</a></li>
+        <li><a href="#roadmap">Roadmap</a></li>
+        <li><a href="#setup">Dev Setup</a></li>
+      </ul>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main>
+
+    <!-- ARCHITECTURE -->
+    <section class="doc-section" id="architecture">
+      <div class="section-eyebrow">System Design</div>
+      <h2 class="section-title">Architecture Overview</h2>
+      <p class="section-sub">Ember is a SwiftUI app organized around a state-store pattern. Views observe ObservableObject stores. All intelligence flows through the Claude API.</p>
+
+      <div class="arch-diagram">
+        <div class="arch-layer">
+          <div class="arch-layer-label">Entry Point</div>
+          <div class="arch-boxes">
+            <div class="arch-box service">EmberApp.swift — @main, WindowGroup → ContentView</div>
+          </div>
+        </div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-layer">
+          <div class="arch-layer-label">View Layer (SwiftUI)</div>
+          <div class="arch-boxes">
+            <div class="arch-box view">ContentView</div>
+            <div class="arch-box view">CircleMemberDetailView</div>
+            <div class="arch-box view">PlanView</div>
+            <div class="arch-box view">DocumentView</div>
+            <div class="arch-box view">SMSSurfaceView</div>
+            <div class="arch-box view">GroupThreadSheet</div>
+            <div class="arch-box view">ProPaywallView</div>
+          </div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="arch-layer">
+          <div class="arch-layer-label">Store Layer (ObservableObject)</div>
+          <div class="arch-boxes">
+            <div class="arch-box store">CircleStore</div>
+            <div class="arch-box store">GroupStore</div>
+            <div class="arch-box store">MemoryStore</div>
+            <div class="arch-box store">DocumentStore</div>
+            <div class="arch-box store">ProManager</div>
+            <div class="arch-box store">VoiceInputManager</div>
+          </div>
+        </div>
+        <div class="arch-arrow">↓</div>
+        <div class="arch-layer">
+          <div class="arch-layer-label">Engine Layer (Logic)</div>
+          <div class="arch-boxes">
+            <div class="arch-box model">EmberCommand (DraftEngine)</div>
+            <div class="arch-box model">DraftPromptBuilder</div>
+            <div class="arch-box model">EmberCardParser</div>
+            <div class="arch-box model">EmberSearchMode</div>
+          </div>
+        </div>
+        <div class="arch-arrow">↕</div>
+        <div class="arch-layer">
+          <div class="arch-layer-label">External Services</div>
+          <div class="arch-boxes">
+            <div class="arch-box external">Claude API (claude-3-5-sonnet)</div>
+            <div class="arch-box external">iOS Contacts (CNContactStore)</div>
+            <div class="arch-box external">MessageUI (iMessage bridge)</div>
+            <div class="arch-box external">SpeechKit + AVFoundation</div>
+            <div class="arch-box external">PDFKit</div>
+            <div class="arch-box external">StoreKit 2 (IAP)</div>
+            <div class="arch-box external">UserDefaults (on-device persistence)</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>Core principle:</strong> All user context lives on-device in UserDefaults — no central server, no profile database. The only outbound data per API call is: first names, memory summaries, the user's message, and active document text.
+      </div>
+    </section>
+
+    <!-- DATA MODELS -->
+    <section class="doc-section" id="data-models">
+      <div class="section-eyebrow">Data Layer</div>
+      <h2 class="section-title">Core Data Models</h2>
+      <p class="section-sub">All models are Swift structs conforming to Identifiable and Codable, persisted via UserDefaults JSON encoding.</p>
+
+      <table class="model-table">
+        <thead>
+          <tr>
+            <th>Model</th>
+            <th>Type</th>
+            <th>Key Fields</th>
+            <th>Source</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>CircleMember</td>
+            <td>struct</td>
+            <td>name, phone, driftLevel, lastContactedDate, conversationTopics, notes, nudgeEnabled, relationshipDepth</td>
+            <td>CircleStore.swift</td>
+          </tr>
+          <tr>
+            <td>EmberGroup</td>
+            <td>struct</td>
+            <td>name, groupType, memberIDs, sharedContext, conversationHistory, activeDocumentID</td>
+            <td>GroupStore.swift</td>
+          </tr>
+          <tr>
+            <td>GroupMessage</td>
+            <td>struct</td>
+            <td>text, isFromUser, timestamp</td>
+            <td>GroupStore.swift</td>
+          </tr>
+          <tr>
+            <td>PersonMemory</td>
+            <td>struct</td>
+            <td>summary (Claude-generated), updatedAt, sessionCount</td>
+            <td>MemoryStore.swift</td>
+          </tr>
+          <tr>
+            <td>GroupMemory</td>
+            <td>struct</td>
+            <td>summary, updatedAt, sessionCount</td>
+            <td>MemoryStore.swift</td>
+          </tr>
+          <tr>
+            <td>EmberDocument</td>
+            <td>struct</td>
+            <td>fileName, propertyAddress, documentType, extractedText, pageCount</td>
+            <td>DocumentStore.swift</td>
+          </tr>
+          <tr>
+            <td>Message</td>
+            <td>struct</td>
+            <td>text, isFromUser, isDraft</td>
+            <td>ContentView.swift</td>
+          </tr>
+          <tr>
+            <td>DriftSuggestion</td>
+            <td>struct</td>
+            <td>member, daysSince, reason</td>
+            <td>CircleStore.swift</td>
+          </tr>
+          <tr>
+            <td>TripPlan</td>
+            <td>struct (Codable)</td>
+            <td>days: [DayPlan], flights, hotels, restaurants, activities</td>
+            <td>Embercards.swift</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table class="model-table">
+        <thead>
+          <tr>
+            <th>Enum</th>
+            <th>Cases</th>
+            <th>Purpose</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>DriftLevel</td>
+            <td>connected, drifting, distant, unknown</td>
+            <td>Tracks relationship health; drives nudge thresholds and UI color coding</td>
+          </tr>
+          <tr>
+            <td>RelationshipDepth</td>
+            <td>close, friend, acquaintance, professional</td>
+            <td>Informs context score and prompt weighting</td>
+          </tr>
+          <tr>
+            <td>DraftIntent</td>
+            <td>nudge, checkIn, reconnect, followUp, congratulate, introduce</td>
+            <td>Routes which prompt template DraftPromptBuilder uses</td>
+          </tr>
+          <tr>
+            <td>GroupType</td>
+            <td>social, organizational</td>
+            <td>Changes system prompt tone in group threads</td>
+          </tr>
+          <tr>
+            <td>DocumentType</td>
+            <td>lease, inspection, listing, appraisal, other</td>
+            <td>Document categorization and icon display</td>
+          </tr>
+          <tr>
+            <td>EmberTab</td>
+            <td>chat, people, files, more</td>
+            <td>Root navigation state in ContentView</td>
+          </tr>
+          <tr>
+            <td>EmberSearchMode</td>
+            <td>all, people, groups, documents, messages</td>
+            <td>Scopes in-chat search results</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <hr class="divider">
+
+    <!-- VIEWS -->
+    <section class="doc-section" id="contentview">
+      <div class="section-eyebrow">Views</div>
+      <h2 class="section-title">ContentView.swift</h2>
+      <p class="section-sub">Root view. 2,011 lines. Owns all @StateObject stores and all tab surfaces. The single source of layout truth.</p>
+
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-view">🏠</div>
+            <div>
+              <div class="card-name">ContentView</div>
+              <div class="card-file">Root container</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">Hosts the header, tab bar, and a ZStack that switches between chat, people, files, and more surfaces. Instantiates all six stores. Manages all sheet presentations.</p>
+            <div class="card-props">
+              <span class="prop-tag highlight">@StateObject ×6</span>
+              <span class="prop-tag">EmberTab switch</span>
+              <span class="prop-tag">15 @State vars</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-view">💬</div>
+            <div>
+              <div class="card-name">chatSurface</div>
+              <div class="card-file">ContentView.swift</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">The primary chat interface. Renders message history, ActivePersonBar, ActiveDocumentBanner, VoiceListeningBanner, and the input row. Handles /command parsing via DraftEngine before each API call.</p>
+            <div class="card-props">
+              <span class="prop-tag">DraftEngine parse</span>
+              <span class="prop-tag">RAG injection</span>
+              <span class="prop-tag">Memory inject</span>
+              <span class="prop-tag highlight">Claude API</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-view">👥</div>
+            <div>
+              <div class="card-name">peopleSurface</div>
+              <div class="card-file">ContentView.swift</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">Lists CircleMembers and EmberGroups. Supports multi-select via CircleMultiSelectBar for group planning. Drift nudges surface here. Tap a member → CircleMemberDetailView sheet.</p>
+            <div class="card-props">
+              <span class="prop-tag">RichCircleMemberRow</span>
+              <span class="prop-tag">GroupRow</span>
+              <span class="prop-tag">DriftNudgeBanner</span>
+              <span class="prop-tag highlight">Multi-select</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-view">📁</div>
+            <div>
+              <div class="card-name">filesSurface</div>
+              <div class="card-file">ContentView.swift</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">Renders the DocumentView for PDF management (Pro-gated). Shows lock badge for free users and routes to paywall.</p>
+            <div class="card-props">
+              <span class="prop-tag warn">Pro required</span>
+              <span class="prop-tag">DocumentView embed</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-view">⚙️</div>
+            <div>
+              <div class="card-name">moreSurface</div>
+              <div class="card-file">ContentView.swift</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">Settings and secondary features: SMS surface, memory management, drift nudge toggles, Pro status, and app info.</p>
+            <div class="card-props">
+              <span class="prop-tag">SMSSurfaceView</span>
+              <span class="prop-tag">Memory controls</span>
+              <span class="prop-tag">Pro status</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-view">🧵</div>
+            <div>
+              <div class="card-name">GroupThreadSheet</div>
+              <div class="card-file">ContentView.swift</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">Full-screen sheet for group conversations. Has its own message history, Claude API call with group context injected, and cross-session memory summary generation on close.</p>
+            <div class="card-props">
+              <span class="prop-tag highlight">Claude API</span>
+              <span class="prop-tag">Group memory</span>
+              <span class="prop-tag">Member context</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <p style="font-size:13px; color:var(--dim); margin-top:4px;">Supporting view components in ContentView: <code>EmberMessageBubble</code>, <code>CircleMemberRow</code>, <code>GroupRow</code>, <code>GroupCreatorView</code>, <code>ContactPickerView</code>, <code>ActivePersonBar</code>, <code>ActiveDocumentBanner</code>, <code>VoiceListeningBanner</code>, <code>TypingIndicator</code>, <code>RichCircleMemberRow</code>, <code>CircleMultiSelectBar</code>, <code>DriftNudgeBanner</code>, <code>CommandsHintRow</code>, <code>TabBarItem</code></p>
+    </section>
+
+    <section class="doc-section" id="circle-detail">
+      <div class="section-eyebrow">View</div>
+      <h2 class="section-title">CircleMemberDetailView.swift</h2>
+      <p class="section-sub">21,324 bytes. Deep profile view for a single CircleMember — context editing, drift control, and draft launching.</p>
+
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-view">👤</div>
+            <div>
+              <div class="card-name">CircleMemberDetailView</div>
+              <div class="card-file">CircleMemberDetailView.swift</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">Full detail sheet for a circle member. Editable fields for lastConnectedDescription, sharedContext, currentContext, conversationTopics, notes. Shows drift level with color. Exposes DraftIntentChip row to launch targeted message drafts.</p>
+            <div class="card-props">
+              <span class="prop-tag">ContextField ×5</span>
+              <span class="prop-tag">DraftIntentChip ×6</span>
+              <span class="prop-tag highlight">onDraft callback</span>
+            </div>
+          </div>
+        </div>
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-view">🏷️</div>
+            <div>
+              <div class="card-name">DraftIntentChip</div>
+              <div class="card-file">CircleMemberDetailView.swift</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">Tappable chip for each DraftIntent case (nudge, check-in, reconnect, follow-up, congratulate, introduce). Triggers the onDraft callback which routes back through ContentView to executeDraft().</p>
+            <div class="card-props">
+              <span class="prop-tag">DraftIntent enum</span>
+              <span class="prop-tag">Callback pattern</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="planview">
+      <div class="section-eyebrow">View</div>
+      <h2 class="section-title">PlanView.swift</h2>
+      <p class="section-sub">Multi-person trip and event planning interface. Feeds structured inputs to Claude for plan generation.</p>
+
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-view">🗺️</div>
+            <div>
+              <div class="card-name">PlanView</div>
+              <div class="card-file">PlanView.swift</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">Tabbed planning interface (Trip / Event). Collects destination, dates, guest count, budget, vibe. Submits structured prompt to Claude. Claude's response is parsed by EmberCardParser into rich card components.</p>
+            <div class="card-props">
+              <span class="prop-tag highlight">Claude API</span>
+              <span class="prop-tag">EmberCardParser</span>
+              <span class="prop-tag">TripPlanCard</span>
+              <span class="prop-tag">Structured prompt</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="document-view">
+      <div class="section-eyebrow">View — Pro Feature</div>
+      <h2 class="section-title">DocumentView.swift</h2>
+      <p class="section-sub">PDF upload, extraction, tagging, and RAG context management.</p>
+
+      <div class="callout warn">Pro-gated. Free users see a lock badge and are redirected to ProPaywallView.</div>
+
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-view">📄</div>
+            <div>
+              <div class="card-name">DocumentView</div>
+              <div class="card-file"> DocumentView.swift</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">File picker integration (Files, iCloud, Dropbox). PDFKit extracts text on a background thread. Documents are tagged to a property address or topic. Active document injects its extractedText into every Claude API call as RAG context.</p>
+            <div class="card-props">
+              <span class="prop-tag warn">Pro required</span>
+              <span class="prop-tag">PDFKit</span>
+              <span class="prop-tag">RAG inject</span>
+              <span class="prop-tag">DocumentStore</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="sms-surface">
+      <div class="section-eyebrow">View</div>
+      <h2 class="section-title">SMSSurfaceView.swift</h2>
+      <p class="section-sub">Standalone SMS feature surface and future Twilio integration placeholder.</p>
+
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-view">💬</div>
+            <div>
+              <div class="card-name">SMSSurfaceView</div>
+              <div class="card-file">SMSSurfaceView.swift</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">Explains SMS drafting workflow to the user. Contains SMSHowItWorksRow components for onboarding. Roadmap placeholder for Brick D (Twilio + Supabase Edge Functions for autonomous SMS).</p>
+            <div class="card-props">
+              <span class="prop-tag">Informational UI</span>
+              <span class="prop-tag">Brick D placeholder</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="paywall">
+      <div class="section-eyebrow">View</div>
+      <h2 class="section-title">ProPaywallView.swift</h2>
+      <p class="section-sub">Subscription purchase and feature comparison UI.</p>
+
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-view">⭐</div>
+            <div>
+              <div class="card-name">ProPaywallView</div>
+              <div class="card-file">ProPaywallView.swift</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">Full-screen paywall sheet. Shows feature comparison (Free vs Pro), purchase button wired to ProManager.purchase(), and restore purchases. Pro product ID: com.watchwewin.ember.pro. StoreKit price: $7.77/week.</p>
+            <div class="card-props">
+              <span class="prop-tag">StoreKit 2</span>
+              <span class="prop-tag">ProManager binding</span>
+              <span class="prop-tag highlight">$7.77/wk</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- STORES -->
+    <section class="doc-section" id="circle-store">
+      <div class="section-eyebrow">Store</div>
+      <h2 class="section-title">CircleStore.swift</h2>
+      <p class="section-sub">The core people graph. Manages CircleMembers and the Drift Engine.</p>
+
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-store">⭕</div>
+            <div>
+              <div class="card-name">CircleStore</div>
+              <div class="card-file">CircleStore.swift · ObservableObject</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">Holds the array of CircleMembers. CRUD operations (add, remove, update). Persists to UserDefaults as JSON. Houses the Drift Engine — a function that surfaces who needs attention based on daysSinceContact and nudgeEnabled.</p>
+            <div class="card-props">
+              <span class="prop-tag">UserDefaults</span>
+              <span class="prop-tag highlight">Drift Engine</span>
+              <span class="prop-tag">DriftSuggestion</span>
+              <span class="prop-tag">Context scoring</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout">
+        The <strong>Drift Engine</strong> computes daysSinceContact for each member with nudgeEnabled, compares it to that member's DriftLevel.nudgeThreshold, and surfaces a ranked DriftSuggestion list. This powers the DriftNudgeBanner in peopleSurface and the /who command.
+      </div>
+    </section>
+
+    <section class="doc-section" id="group-store">
+      <div class="section-eyebrow">Store</div>
+      <h2 class="section-title">GroupStore.swift</h2>
+      <p class="section-sub">Manages named group threads — social and organizational.</p>
+
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-store">🔗</div>
+            <div>
+              <div class="card-name">GroupStore</div>
+              <div class="card-file">GroupStore.swift · ObservableObject</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">CRUD for EmberGroups. Stores conversationHistory per group (GroupMessage array). Supports addMember, removeMember, clearHistory. Groups reference CircleMember IDs — they don't copy member data. Persists via UserDefaults.</p>
+            <div class="card-props">
+              <span class="prop-tag">UserDefaults</span>
+              <span class="prop-tag">GroupMessage history</span>
+              <span class="prop-tag">Member ID refs</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="memory-store">
+      <div class="section-eyebrow">Store</div>
+      <h2 class="section-title">MemoryStore.swift</h2>
+      <p class="section-sub">Cross-session memory via Claude-generated summaries.</p>
+
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-store">🧠</div>
+            <div>
+              <div class="card-name">MemoryStore</div>
+              <div class="card-file">MemoryStore.swift · ObservableObject</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">Stores PersonMemory and GroupMemory keyed by ID. On session end, calls generateSummary() — a Claude API call that condenses conversation history into a 2–3 sentence summary. On next session open, contextString() injects that summary into the system prompt.</p>
+            <div class="card-props">
+              <span class="prop-tag highlight">Claude API (summary)</span>
+              <span class="prop-tag">contextString inject</span>
+              <span class="prop-tag">sessionCount tracking</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flow">
+        <div class="flow-step active">Session opens</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">memoryStore.contextString()</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">Injected into system prompt</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step active">Claude API call</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">Session ends</div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">generateSummary() → stored</div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="document-store">
+      <div class="section-eyebrow">Store</div>
+      <h2 class="section-title">DocumentStore.swift</h2>
+      <p class="section-sub">PDF document management and RAG context builder.</p>
+
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-store">📚</div>
+            <div>
+              <div class="card-name">DocumentStore</div>
+              <div class="card-file">DocumentStore.swift · ObservableObject</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">Holds EmberDocuments. buildDocumentContext() assembles the extractedText of all active documents into a formatted string that gets prepended to the Claude system prompt. Supports filtering documents by property address.</p>
+            <div class="card-props">
+              <span class="prop-tag">buildDocumentContext()</span>
+              <span class="prop-tag">RAG builder</span>
+              <span class="prop-tag warn">Pro feature</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- SERVICES -->
+    <section class="doc-section" id="voice">
+      <div class="section-eyebrow">Service</div>
+      <h2 class="section-title">VoiceInputManager.swift</h2>
+
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-service">🎙️</div>
+            <div>
+              <div class="card-name">VoiceInputManager</div>
+              <div class="card-file">VoiceInputManager.swift · ObservableObject</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">Wraps SpeechKit (SFSpeechRecognizer) and AVAudioEngine for real-time transcription. requestPermissions() handles both Microphone and Speech Recognition entitlements. startListening() streams recognized text into a @Published transcript that binds to the chat input field.</p>
+            <div class="card-props">
+              <span class="prop-tag">SpeechKit</span>
+              <span class="prop-tag">AVAudioEngine</span>
+              <span class="prop-tag">@Published transcript</span>
+              <span class="prop-tag">toggle()</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="pro">
+      <div class="section-eyebrow">Service</div>
+      <h2 class="section-title">ProManager.swift</h2>
+
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-service">💳</div>
+            <div>
+              <div class="card-name">ProManager</div>
+              <div class="card-file">ProManager.swift · ObservableObject</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">StoreKit 2 IAP lifecycle manager. Loads the Pro product (com.watchwewin.ember.pro), handles purchase(), restorePurchases(), and transaction verification. manualUnlock() / manualRevoke() exposed for dev testing via 5x logo tap.</p>
+            <div class="card-props">
+              <span class="prop-tag highlight">StoreKit 2</span>
+              <span class="prop-tag">@Published isPro</span>
+              <span class="prop-tag">Dev unlock (5x tap)</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="draft-engine">
+      <div class="section-eyebrow">Engine</div>
+      <h2 class="section-title">DraftEngine.swift (Draftengine.swift)</h2>
+      <p class="section-sub">Slash command parser and context-aware prompt builder for SMS drafting.</p>
+
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-engine">⚡</div>
+            <div>
+              <div class="card-name">EmberCommand</div>
+              <div class="card-file">Draftengine.swift · enum</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">Parses typed input for slash commands. EmberCommand.parse() tokenizes the input string and returns a typed command case. ContentView's send handler calls this before every API call to intercept commands.</p>
+            <div class="card-props">
+              <span class="prop-tag">Static parse()</span>
+              <span class="prop-tag">9 command cases</span>
+            </div>
+          </div>
+        </div>
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-engine">📝</div>
+            <div>
+              <div class="card-name">DraftPromptBuilder</div>
+              <div class="card-file">Draftengine.swift · struct</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">Builds the Claude system prompt for SMS drafting. Combines CircleMember context fields with the DraftIntent to produce a targeted, person-specific message prompt. Output is sent to Claude; response is rendered as a draft bubble.</p>
+            <div class="card-props">
+              <span class="prop-tag highlight">Context injection</span>
+              <span class="prop-tag">DraftIntent routing</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cmd-grid" style="margin-top:20px;">
+        <div class="cmd-card"><span class="cmd-name">/draft [name]</span><span class="cmd-desc">Context-appropriate message for person</span></div>
+        <div class="cmd-card"><span class="cmd-name">/nudge [name]</span><span class="cmd-desc">Low-pressure check-in</span></div>
+        <div class="cmd-card"><span class="cmd-name">/checkin [name]</span><span class="cmd-desc">Explicit check-in message</span></div>
+        <div class="cmd-card"><span class="cmd-name">/reconnect [name]</span><span class="cmd-desc">It's been a while message</span></div>
+        <div class="cmd-card"><span class="cmd-name">/followup [name]</span><span class="cmd-desc">Follow up on last conversation topic</span></div>
+        <div class="cmd-card"><span class="cmd-name">/congratulate [name]</span><span class="cmd-desc">Celebrate something specific</span></div>
+        <div class="cmd-card"><span class="cmd-name">/introduce [n1] [n2]</span><span class="cmd-desc">Introduction message for two people</span></div>
+        <div class="cmd-card"><span class="cmd-name">/plan [what]</span><span class="cmd-desc">Multi-person planning mode</span></div>
+        <div class="cmd-card"><span class="cmd-name">/who</span><span class="cmd-desc">Who needs attention right now</span></div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="ember-cards">
+      <div class="section-eyebrow">Engine</div>
+      <h2 class="section-title">Embercards.swift</h2>
+      <p class="section-sub">Structured response parser and rich card UI components for trip planning output.</p>
+
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-engine">🃏</div>
+            <div>
+              <div class="card-name">EmberCardParser</div>
+              <div class="card-file">Embercards.swift · struct</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">Parses Claude's structured JSON response (prompted via PlanView) into a TripPlan model — extracting days, flights, hotels, restaurants, and activities. Falls back gracefully if parsing fails.</p>
+            <div class="card-props">
+              <span class="prop-tag">JSON decode</span>
+              <span class="prop-tag">TripPlan model</span>
+            </div>
+          </div>
+        </div>
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-view">✈️</div>
+            <div>
+              <div class="card-name">Card Components</div>
+              <div class="card-file">Embercards.swift · Views</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">TripPlanCard, DayDetailCard, CompactFlightCard, CompactHotelCard, CompactRestaurantCard, ActivityCard, FlightCardsView, RestaurantCardsView, FlightCard, RestaurantCard. Plus shared EmberActionButton, EmberPayButton, EmberCardHeader.</p>
+            <div class="card-props">
+              <span class="prop-tag">12 card components</span>
+              <span class="prop-tag">Shared action buttons</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section" id="search">
+      <div class="section-eyebrow">Engine</div>
+      <h2 class="section-title">EmberSearchMode.swift</h2>
+
+      <div class="component-grid">
+        <div class="component-card">
+          <div class="card-header">
+            <div class="card-icon icon-engine">🔍</div>
+            <div>
+              <div class="card-name">EmberSearchMode + EmberQuickSearchBar</div>
+              <div class="card-file">EmberSearchMode.swift</div>
+            </div>
+          </div>
+          <div class="card-body">
+            <p class="card-desc">EmberSearchMode enum scopes search: all, people, groups, documents, messages. EmberQuickSearchBar is the inline search UI that appears in the chat header when the magnifying glass is tapped. Filters across all content types in one pass.</p>
+            <div class="card-props">
+              <span class="prop-tag">5 search modes</span>
+              <span class="prop-tag">Inline search bar</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="divider">
+
+    <!-- BUILD LOG -->
+    <section class="doc-section" id="build-log">
+      <div class="section-eyebrow">Project History</div>
+      <h2 class="section-title">Build Log</h2>
+      <p class="section-sub">13 shipped bricks. Every version is a working build on device before moving to the next.</p>
+
+      <div class="build-log">
+        <div class="build-row">
+          <span class="build-brick">Brick 1</span>
+          <span class="build-version">v0.1.0</span>
+          <span class="build-what">Project scaffolding — Xcode, SwiftUI, Hello World on device</span>
+          <span class="status-dot"><span class="dot dot-done"></span>Shipped</span>
+        </div>
+        <div class="build-row">
+          <span class="build-brick">Brick 2</span>
+          <span class="build-version">v0.2.0</span>
+          <span class="build-what">Claude API integration — live responses in app</span>
+          <span class="status-dot"><span class="dot dot-done"></span>Shipped</span>
+        </div>
+        <div class="build-row">
+          <span class="build-brick">Brick 3</span>
+          <span class="build-version">v0.3.0</span>
+          <span class="build-what">Config.xcconfig — API key secured, never in Git</span>
+          <span class="status-dot"><span class="dot dot-done"></span>Shipped</span>
+        </div>
+        <div class="build-row">
+          <span class="build-brick">Brick 4</span>
+          <span class="build-version">v0.4.0</span>
+          <span class="build-what">Conversation memory — full history sent per API call</span>
+          <span class="status-dot"><span class="dot dot-done"></span>Shipped</span>
+        </div>
+        <div class="build-row">
+          <span class="build-brick">Brick 5</span>
+          <span class="build-version">v0.5.0</span>
+          <span class="build-what">Contacts — iOS permission, real list, search, pull to refresh</span>
+          <span class="status-dot"><span class="dot dot-done"></span>Shipped</span>
+        </div>
+        <div class="build-row">
+          <span class="build-brick">Brick 6</span>
+          <span class="build-version">v0.6.0</span>
+          <span class="build-what">Personal circle — add/remove, UserDefaults, drift levels, context memory</span>
+          <span class="status-dot"><span class="dot dot-done"></span>Shipped</span>
+        </div>
+        <div class="build-row">
+          <span class="build-brick">Brick 7</span>
+          <span class="build-version">v0.7.0</span>
+          <span class="build-what">SMS drafting — MessageUI bridge, draft bubbles, Send via Messages</span>
+          <span class="status-dot"><span class="dot dot-done"></span>Shipped</span>
+        </div>
+        <div class="build-row">
+          <span class="build-brick">Brick A</span>
+          <span class="build-version">v0.8.0</span>
+          <span class="build-what">Document intelligence — PDF upload, PDFKit extraction, RAG injection</span>
+          <span class="status-dot"><span class="dot dot-done"></span>Shipped</span>
+        </div>
+        <div class="build-row">
+          <span class="build-brick">Brick B</span>
+          <span class="build-version">v0.9.0</span>
+          <span class="build-what">Voice input — SpeechKit, real-time transcription, mic button</span>
+          <span class="status-dot"><span class="dot dot-done"></span>Shipped</span>
+        </div>
+        <div class="build-row">
+          <span class="build-brick">Brick E</span>
+          <span class="build-version">v0.10.0</span>
+          <span class="build-what">Group threads — named groups, social + org types, persistent history</span>
+          <span class="status-dot"><span class="dot dot-done"></span>Shipped</span>
+        </div>
+        <div class="build-row">
+          <span class="build-brick">Brick F</span>
+          <span class="build-version">v0.11.0</span>
+          <span class="build-what">Cross-session memory — Claude summaries, injected on return</span>
+          <span class="status-dot"><span class="dot dot-done"></span>Shipped</span>
+        </div>
+        <div class="build-row">
+          <span class="build-brick">Brick G</span>
+          <span class="build-version">v1.0.0</span>
+          <span class="build-what">Pro tier — StoreKit 2 IAP, manual enterprise unlock, paywall</span>
+          <span class="status-dot"><span class="dot dot-done"></span>Shipped</span>
+        </div>
+        <div class="build-row">
+          <span class="build-brick">Web</span>
+          <span class="build-version">v1.0.0</span>
+          <span class="build-what">ember.watchwewin.com — Cloudflare proxy, lead capture, EmailJS</span>
+          <span class="status-dot"><span class="dot dot-done"></span>Shipped</span>
+        </div>
+        <div class="build-row">
+          <span class="build-brick">Brick C</span>
+          <span class="build-version">v1.1.0</span>
+          <span class="build-what">Voice output — Ember speaks responses (AVSpeechSynthesizer)</span>
+          <span class="status-dot"><span class="dot dot-planned"></span>Planned</span>
+        </div>
+        <div class="build-row">
+          <span class="build-brick">Brick D</span>
+          <span class="build-version">v1.2.0</span>
+          <span class="build-what">SMS surface — Twilio + Supabase Edge Functions</span>
+          <span class="status-dot"><span class="dot dot-planned"></span>Planned</span>
+        </div>
+        <div class="build-row">
+          <span class="build-brick">Brick H</span>
+          <span class="build-version">v1.3.0</span>
+          <span class="build-what">App Store — icon, launch screen, TestFlight public beta</span>
+          <span class="status-dot"><span class="dot dot-planned"></span>Planned</span>
+        </div>
+        <div class="build-row">
+          <span class="build-brick">Brick I</span>
+          <span class="build-version">v2.0.0</span>
+          <span class="build-what">Framework SDK — developer licensing, Swift + TypeScript packages</span>
+          <span class="status-dot"><span class="dot dot-future"></span>Roadmap</span>
+        </div>
+        <div class="build-row">
+          <span class="build-brick">Brick J</span>
+          <span class="build-version">v2.1.0</span>
+          <span class="build-what">Spatial — Apple Vision Pro, Meta glasses adapter</span>
+          <span class="status-dot"><span class="dot dot-future"></span>Roadmap</span>
+        </div>
+        <div class="build-row">
+          <span class="build-brick">Brick K</span>
+          <span class="build-version">v2.2.0</span>
+          <span class="build-what">AiOT — health monitors, wearables, passive context signal</span>
+          <span class="status-dot"><span class="dot dot-future"></span>Roadmap</span>
+        </div>
+        <div class="build-row">
+          <span class="build-brick">Brick L</span>
+          <span class="build-version">v3.0.0</span>
+          <span class="build-what">Quantum — probabilistic personalization at classical-impossible scale</span>
+          <span class="status-dot"><span class="dot dot-horizon"></span>Horizon</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ROADMAP -->
+    <section class="doc-section" id="roadmap">
+      <div class="section-eyebrow">Business</div>
+      <h2 class="section-title">Pricing & Distribution Roadmap</h2>
+
+      <div class="pricing-grid">
+        <div class="pricing-card">
+          <div class="pricing-tier">Free</div>
+          <div class="pricing-price">$0</div>
+          <div class="pricing-period">forever</div>
+          <ul class="pricing-features">
+            <li>50 messages / month</li>
+            <li>Personal circle</li>
+            <li>Cross-session memory</li>
+            <li>SMS drafting</li>
+            <li>Voice input</li>
+          </ul>
+        </div>
+        <div class="pricing-card featured">
+          <div class="pricing-tier">Pro</div>
+          <div class="pricing-price">$9.99</div>
+          <div class="pricing-period">per month · ($7.77/wk in StoreKit)</div>
+          <ul class="pricing-features">
+            <li>Unlimited messages</li>
+            <li>Document intelligence (PDF RAG)</li>
+            <li>Group threads</li>
+            <li>Voice input + output</li>
+            <li>Priority support</li>
+          </ul>
+        </div>
+        <div class="pricing-card">
+          <div class="pricing-tier">Enterprise</div>
+          <div class="pricing-price">$49+</div>
+          <div class="pricing-period">per month</div>
+          <ul class="pricing-features">
+            <li>Dedicated Twilio number</li>
+            <li>Supabase storage</li>
+            <li>Admin dashboard</li>
+            <li>Custom context rules</li>
+            <li>Framework SDK access</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout">
+        Unit economics: Free user ~$0.40–0.60/mo cost. Pro user ~$2–4 cost → $9.99 price → ~$6–8 margin. Enterprise is near-pure margin. Framework B2B: Open Core (MIT) → Commercial license → Enterprise custom.
+      </div>
+    </section>
+
+    <!-- SETUP -->
+    <section class="doc-section" id="setup">
+      <div class="section-eyebrow">Developer</div>
+      <h2 class="section-title">Setup & Configuration</h2>
+
+      <pre><span class="c"># 1. Clone</span>
+git clone https://github.com/positivelympw/ember.git
+<span class="k">cd</span> ember
+open Ember.xcodeproj
+
+<span class="c"># 2. Create Config.xcconfig in Xcode (never commit this)</span>
+<span class="c"># Xcode → right-click Ember folder → New File → Configuration Settings File</span>
+<span class="t">CLAUDE_API_KEY</span> = sk-ant-your-key-here
+
+<span class="c"># 3. Wire it: Ember project → Info tab → Configurations
+#    → Debug → Ember → select Config.xcconfig</span>
+
+<span class="c"># 4. Run: ⌘R (on connected device)</span>
+<span class="c"># Dev Pro unlock: tap Ember logo 5 times quickly</span></pre>
+
+      <table class="model-table">
+        <thead>
+          <tr>
+            <th>Requirement</th>
+            <th>Version</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>macOS</td><td>Ventura 13.0+</td></tr>
+          <tr><td>Xcode</td><td>15.0+</td></tr>
+          <tr><td>iOS target</td><td>17.0+</td></tr>
+          <tr><td>Claude API key</td><td>console.anthropic.com</td></tr>
+          <tr><td>Apple ID</td><td>Free (device signing)</td></tr>
+          <tr><td>Apple Developer</td><td>$99/yr (App Store only)</td></tr>
+        </tbody>
+      </table>
+
+      <table class="model-table" style="margin-top:16px;">
+        <thead>
+          <tr>
+            <th>Info.plist Key</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>NSContactsUsageDescription</td><td>To build context about the people in your life.</td></tr>
+          <tr><td>NSMicrophoneUsageDescription</td><td>For voice input — speak to Ember instead of typing.</td></tr>
+          <tr><td>NSSpeechRecognitionUsageDescription</td><td>To transcribe your voice into text in real time.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+  </main>
+</div>
+
+<footer>
+  ember — conversational context framework — patent pending · built by WatchWeWin · v1.0.0-beta · April 2026
+</footer>
+
+</body>
+</html>
