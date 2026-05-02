@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WatchWeWin — Strategy. Systems. Storytelling.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700;1,900&family=DM+Sans:wght@300;400;500;600;700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ── WP NUCLEAR RESET ── */
+header,.site-header,#masthead,.navbar,.nav-primary,#header,.header-main,
+.main-navigation,#site-navigation,.salient-header,#top-bar,.top-bar,
+#header-outer,#header-outer *,#header-space,.page-header-bg-image,
+.nectar-header,.main-nav-side-widget-area,#slide-out-widget-area-bg,
+footer,#footer-outer,#footer-outer *,#footer-secondary-outer,
+.footer-widget-area,.copyright-footer,.nectar-footer,
+.site-footer,.footer-wrap,.copyright-bar,
+div[id*="footer"],div[class*="footer"]:not(.foot){
+  display:none!important;height:0!important;overflow:hidden!important;max-height:0!important;
+}
+html,body{
+  margin:0!important;padding:0!important;
+  background:#0a0a08!important;
+}
+#wpadminbar{display:block!important;}
+.wpb_wrapper,.vc_column-inner,.wpb_row,.vc_row,.vc_row-fluid,
+.vc_column_container,.vc_col-sm-12,[class*="vc_col-"]{
+  padding:0!important;margin:0!important;
+  background:transparent!important;
+  border:none!important;float:none!important;
+  width:100%!important;max-width:100%!important;
+}
+#ajax-content-wrap{
+  padding:0!important;margin:0!important;
+  background:#0a0a08!important;
+}
+.container,.nectar-box-roll-inner,.full-width-section,.full-page-wrap{
+  background:transparent!important;padding:0!important;margin:0!important;
+}
+
+:root{--ink:#0a0a08;--cream:#f5f0e8;--teal:#2ec4b6;--orange:#e84d1c;--teal-a:rgba(46,196,182,0.1);--teal-b:rgba(46,196,182,0.22);}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:#0a0a08!important;color:#fff!important;-webkit-font-smoothing:antialiased;overflow-x:hidden;}
+a{text-decoration:none;-webkit-tap-highlight-color:transparent;}
+input,button{-webkit-appearance:none;appearance:none;font-family:inherit;}
+
+/* ── NAV ── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:200;height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 3rem;background:rgba(10,10,8,0.92)!important;backdrop-filter:blur(24px);border-bottom:1px solid rgba(255,255,255,0.06);}
+.nav-brand{font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:700;color:rgba(255,255,255,0.5)!important;}
+.nav-links{display:flex;gap:2.5rem;position:absolute;left:50%;transform:translateX(-50%);}
+.nav-links a{font-size:0.68rem;font-weight:500;color:rgba(255,255,255,0.25)!important;letter-spacing:0.06em;text-transform:uppercase;transition:color 0.2s;}
+.nav-links a:hover{color:rgba(255,255,255,0.7)!important;}
+.nav-cta{font-size:0.72rem;font-weight:700;color:var(--ink)!important;background:var(--teal);padding:0.45rem 1.2rem;border-radius:99px;text-transform:lowercase;transition:opacity 0.15s;}
+.nav-cta:hover{opacity:0.85;}
+
+/* ── HERO ── */
+.hero{height:100vh;position:relative;overflow:hidden;display:flex;align-items:flex-end;}
+.hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0.35;}
+.hero::after{content:'';position:absolute;inset:0;background:linear-gradient(175deg,rgba(10,10,8,0) 0%,rgba(10,10,8,0.55) 50%,rgba(10,10,8,0.98) 100%);}
+.hero-inner{position:relative;z-index:2;padding:0 3rem 6rem;max-width:900px;}
+.hero-tag{font-family:'DM Mono',monospace;font-size:0.6rem;font-weight:500;letter-spacing:0.3em;text-transform:uppercase;color:var(--teal)!important;margin-bottom:2rem;}
+.hero h1{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(3.5rem,9vw,9rem);line-height:0.92;letter-spacing:-0.04em;color:#fff!important;margin-bottom:1.8rem;}
+.hero h1 em{font-weight:400;font-style:italic;color:var(--teal)!important;}
+.hero-sub{font-size:1rem;font-weight:300;line-height:2;color:rgba(255,255,255,0.35)!important;max-width:420px;margin-bottom:2.5rem;}
+.hero-ctas{display:flex;gap:0.75rem;flex-wrap:wrap;}
+.btn-hot{font-size:0.82rem;font-weight:700;color:var(--ink)!important;background:var(--teal);padding:0.85rem 2rem;border-radius:99px;text-transform:lowercase;transition:opacity 0.15s;}
+.btn-hot:hover{opacity:0.85;}
+.btn-cool{font-size:0.82rem;font-weight:500;color:rgba(255,255,255,0.35)!important;border:1px solid rgba(255,255,255,0.12);padding:0.85rem 2rem;border-radius:99px;transition:all 0.2s;}
+.btn-cool:hover{color:rgba(255,255,255,0.75)!important;border-color:rgba(255,255,255,0.35);}
+
+/* ── MARQUEE ── */
+.marquee{overflow:hidden;border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06);padding:1rem 0;background:#0a0a08!important;width:100%;}
+.marquee-inner{display:flex;gap:3rem;animation:scroll 20s linear infinite;white-space:nowrap;width:max-content;}
+.marquee-inner span{font-family:'Playfair Display',serif;font-size:0.85rem;font-style:italic;color:rgba(255,255,255,0.12)!important;}
+@keyframes scroll{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
+
+/* ── PILLARS ── */
+.pillars-wrap{background:#0a0a08;width:100%;}
+.pillars{padding:6rem 3rem;max-width:1200px;margin:0 auto;}
+.pillars-pre{font-family:'DM Mono',monospace;font-size:0.58rem;font-weight:500;letter-spacing:0.3em;text-transform:uppercase;color:var(--orange)!important;margin-bottom:1rem;}
+.pillars-h{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(2rem,4.5vw,4.5rem);line-height:1;letter-spacing:-0.035em;color:#fff!important;margin-bottom:4rem;}
+.pillars-h em{font-weight:400;font-style:italic;color:rgba(255,255,255,0.3)!important;}
+
+.pillar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(255,255,255,0.04);}
+.pillar{background:var(--ink)!important;padding:3rem 2.5rem;position:relative;border-top:3px solid transparent;transition:border-color 0.3s;}
+.pillar:hover{border-top-color:var(--orange);}
+.pillar-num{font-family:'Playfair Display',serif;font-size:5rem;font-weight:900;color:rgba(255,255,255,0.04)!important;line-height:1;position:absolute;top:1.5rem;right:1.5rem;}
+.pillar-name{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:#fff!important;margin-bottom:0.75rem;}
+.pillar-body{font-size:0.85rem;font-weight:300;line-height:1.85;color:rgba(255,255,255,0.3)!important;}
+.pillar-body strong{font-weight:600;color:rgba(255,255,255,0.65)!important;}
+.pillar-tags{display:flex;flex-wrap:wrap;gap:0.3rem;margin-top:1.5rem;padding-top:1.5rem;border-top:1px solid rgba(255,255,255,0.06);}
+.ptag{font-family:'DM Mono',monospace;font-size:0.55rem;font-weight:500;color:rgba(255,255,255,0.2)!important;background:rgba(255,255,255,0.04);padding:0.2rem 0.55rem;border-radius:99px;}
+.pillar-clients{display:flex;flex-direction:column;gap:0;margin-top:1.75rem;padding-top:1.75rem;border-top:1px solid rgba(255,255,255,0.08);}
+.pc{display:flex;align-items:center;gap:1rem;padding:0.9rem 0;border-bottom:1px solid rgba(255,255,255,0.05);}
+.pc:last-child{border-bottom:none;padding-bottom:0;}
+.pc:first-child{padding-top:0;}
+.pc-name a{color:inherit;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.15);transition:border-color 0.15s;}
+.pc-name a:hover{border-color:rgba(255,255,255,0.5);}
+.pc-name{font-family:'DM Mono',monospace;font-size:0.6rem;font-weight:600;letter-spacing:0.06em;text-transform:uppercase;color:rgba(255,255,255,0.55);white-space:nowrap;flex-shrink:0;width:96px;}
+.pc-bar{width:1px;height:28px;background:rgba(255,255,255,0.08);flex-shrink:0;}
+.pc-delivery{font-size:0.72rem;font-weight:300;line-height:1.5;color:rgba(255,255,255,0.38);font-style:italic;}
+.pc-delivery strong{font-weight:600;font-style:normal;color:rgba(255,255,255,0.65);}
+.pc:hover .pc-name a{color:inherit;text-decoration:none;border-bottom:1px solid rgba(255,255,255,0.15);transition:border-color 0.15s;}
+.pc-name a:hover{border-color:rgba(255,255,255,0.5);}
+.pc-name{color:rgba(255,255,255,0.85);}
+.pc:hover .pc-delivery{color:rgba(255,255,255,0.55);}
+
+/* ── DECLARATION ── */
+.decl{background:var(--orange)!important;padding:5rem 3rem;}
+.decl-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
+.decl-h{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(2.2rem,4vw,4rem);line-height:1.02;letter-spacing:-0.03em;color:#fff!important;}
+.decl-h em{font-weight:400;font-style:italic;color:rgba(255,255,255,0.45)!important;}
+.decl-body p{font-size:0.95rem;font-weight:300;line-height:1.9;color:rgba(255,255,255,0.7)!important;margin-bottom:0.85rem;}
+.decl-body strong{font-weight:700;color:#fff!important;}
+.decl-link{display:inline-block;margin-top:1rem;font-size:0.82rem;font-weight:700;color:#fff!important;border-bottom:2px solid rgba(255,255,255,0.4);padding-bottom:3px;text-transform:lowercase;transition:border-color 0.15s;}
+.decl-link:hover{border-color:#fff;}
+
+/* ── EMBER INTRO ── */
+.ember-wrap{background:#0a0a08;width:100%;border-top:1px solid rgba(255,255,255,0.06);}
+.ember-s{padding:6rem 3rem;max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1.4fr;gap:6rem;align-items:start;}
+.ember-tag{font-family:'DM Mono',monospace;font-size:0.58rem;font-weight:500;letter-spacing:0.3em;text-transform:uppercase;color:var(--teal)!important;margin-bottom:1rem;}
+.ember-h{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(2rem,3.5vw,3.5rem);line-height:1.05;letter-spacing:-0.03em;color:#fff!important;}
+.ember-h em{font-weight:400;font-style:italic;color:var(--teal)!important;}
+.ember-truth{border-left:3px solid var(--orange);padding-left:1.5rem;margin-bottom:2.5rem;}
+.ember-truth-lbl{font-family:'DM Mono',monospace;font-size:0.52rem;font-weight:500;letter-spacing:0.2em;text-transform:uppercase;color:var(--orange)!important;margin-bottom:0.5rem;}
+.ember-truth-txt{font-size:0.95rem;font-weight:300;line-height:1.85;color:rgba(255,255,255,0.55)!important;}
+.contrast{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:rgba(255,255,255,0.04);border-radius:8px;overflow:hidden;}
+.cc{background:var(--ink)!important;padding:1.5rem 1.25rem;}
+.cc.mid{background:rgba(46,196,182,0.05)!important;border-top:2px solid var(--teal);}
+.cc-lbl{font-family:'DM Mono',monospace;font-size:0.5rem;font-weight:500;letter-spacing:0.14em;text-transform:uppercase;color:rgba(255,255,255,0.2)!important;margin-bottom:0.5rem;}
+.cc.mid .cc-lbl{color:var(--teal)!important;}
+.cc-head{font-family:'Playfair Display',serif;font-size:1.05rem;font-weight:700;color:#fff!important;margin-bottom:0.4rem;}
+.cc-body{font-size:0.76rem;font-weight:300;line-height:1.75;color:rgba(255,255,255,0.25)!important;}
+
+/* ── MANIFESTO ── */
+.manifesto{padding:6rem 3rem;background:#0a0a08!important;border-top:1px solid rgba(255,255,255,0.06);}
+.manifesto-inner{max-width:680px;margin:0 auto;}
+.manifesto-tag{font-family:'DM Mono',monospace;font-size:0.58rem;font-weight:500;letter-spacing:0.3em;text-transform:uppercase;color:var(--orange)!important;margin-bottom:2rem;}
+.manifesto-pull{font-family:'Playfair Display',serif;font-style:italic;font-weight:400;font-size:clamp(1.6rem,2.5vw,2.2rem);line-height:1.4;color:rgba(255,255,255,0.65)!important;margin-bottom:3rem;border-left:3px solid var(--orange);padding-left:1.5rem;}
+.manifesto-body p{font-size:0.92rem;font-weight:300;line-height:2;color:rgba(255,255,255,0.35)!important;margin-bottom:1.2rem;}
+.manifesto-body .lead{font-size:1rem;font-weight:400;color:rgba(255,255,255,0.55)!important;}
+.manifesto-body .pop{font-family:'Playfair Display',serif;font-style:italic;font-size:1.4rem;font-weight:700;color:var(--teal)!important;line-height:1.3;margin:1.5rem 0;}
+.manifesto-body .close{color:rgba(255,255,255,0.5)!important;font-weight:400;}
+
+/* ── CTA ── */
+.cta{padding:9rem 3rem;text-align:center;background:#0a0a08!important;position:relative;overflow:hidden;border-top:1px solid rgba(255,255,255,0.06);}
+.cta::before{content:'';position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:600px;height:300px;background:radial-gradient(ellipse,rgba(46,196,182,0.05) 0%,transparent 70%);pointer-events:none;}
+.cta-inner{max-width:560px;margin:0 auto;position:relative;z-index:1;}
+.cta h2{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(2.5rem,6vw,5.5rem);line-height:0.98;letter-spacing:-0.035em;color:#fff!important;margin-bottom:1.5rem;}
+.cta h2 em{font-weight:400;font-style:italic;color:var(--teal)!important;}
+.cta p{font-size:0.92rem;font-weight:300;line-height:1.85;color:rgba(255,255,255,0.25)!important;max-width:380px;margin:0 auto 2.5rem;}
+.cta-actions{display:flex;align-items:center;justify-content:center;gap:1rem;flex-wrap:wrap;}
+.cta-go{display:inline-block;font-size:0.88rem;font-weight:700;color:var(--ink)!important;background:var(--teal);padding:1rem 2.5rem;border-radius:99px;text-transform:lowercase;transition:opacity 0.15s;}
+.cta-go:hover{opacity:0.85;}
+.cta-gh{display:inline-block;font-size:0.82rem;font-weight:500;color:rgba(255,255,255,0.35)!important;border:1px solid rgba(255,255,255,0.12);padding:1rem 2rem;border-radius:99px;transition:all 0.2s;}
+.cta-gh:hover{color:rgba(255,255,255,0.75)!important;border-color:rgba(255,255,255,0.35);}
+
+/* ── FOOTER ── */
+.foot{background:#0a0a08!important;border-top:1px solid rgba(255,255,255,0.06);padding:1.5rem 3rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.foot-brand{font-family:'Playfair Display',serif;font-size:0.82rem;font-weight:700;color:rgba(255,255,255,0.15)!important;}
+.foot-tag{font-family:'Playfair Display',serif;font-size:0.6rem;font-style:italic;color:rgba(255,255,255,0.1)!important;}
+.foot-links{display:flex;gap:1.5rem;}
+.foot-links a{font-size:0.6rem;color:rgba(255,255,255,0.14)!important;transition:color 0.15s;}
+.foot-links a:hover{color:var(--teal)!important;}
+
+
+/* ── EMBER IPHONE SHOWCASE ── */
+.iphone-s{padding:6rem 3rem;background:#0a0a08!important;border-top:1px solid rgba(255,255,255,0.06);width:100%;}
+.iphone-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:6rem;align-items:center;}
+.iphone-copy-tag{font-family:'DM Mono',monospace;font-size:0.58rem;font-weight:500;letter-spacing:0.3em;text-transform:uppercase;color:var(--teal)!important;margin-bottom:1rem;}
+.iphone-copy h2{font-family:'Playfair Display',serif;font-weight:900;font-size:clamp(2rem,3.5vw,3.5rem);line-height:1.05;letter-spacing:-0.03em;color:#fff!important;margin-bottom:1.5rem;}
+.iphone-copy h2 em{font-weight:400;font-style:italic;color:var(--teal)!important;}
+.iphone-copy p{font-size:0.92rem;font-weight:300;line-height:1.9;color:rgba(255,255,255,0.35)!important;margin-bottom:0.9rem;}
+.iphone-copy p strong{font-weight:600;color:rgba(255,255,255,0.65)!important;}
+.iphone-copy-features{display:flex;flex-direction:column;gap:0;margin-top:2rem;padding-top:2rem;border-top:1px solid rgba(255,255,255,0.08);}
+.icf{display:flex;align-items:baseline;gap:0.75rem;padding:0.65rem 0;border-bottom:1px solid rgba(255,255,255,0.04);}
+.icf:last-child{border-bottom:none;}
+.icf-dot{width:4px;height:4px;border-radius:50%;background:var(--teal);flex-shrink:0;margin-top:0.35rem;}
+.icf-text{font-size:0.8rem;font-weight:300;line-height:1.6;color:rgba(255,255,255,0.35)!important;}
+.icf-text strong{font-weight:600;color:rgba(255,255,255,0.65)!important;}
+
+/* iPhone frame */
+.iphone-frame{display:flex;justify-content:center;align-items:center;position:relative;}
+.iphone-glow{position:absolute;bottom:-20px;left:50%;transform:translateX(-50%);width:220px;height:80px;background:radial-gradient(ellipse,rgba(46,196,182,0.14) 0%,transparent 70%);pointer-events:none;z-index:0;}
+.iph{width:226px;background:#1c1c1c;border-radius:42px;padding:10px;box-shadow:0 0 0 1px #2e2e2e,0 0 0 2px #1a1a1a,0 32px 72px rgba(0,0,0,0.75);position:relative;z-index:1;}
+.iph::before{content:'';position:absolute;left:-2.5px;top:80px;width:2.5px;height:26px;background:#242424;border-radius:2px 0 0 2px;box-shadow:0 36px 0 #242424,0 64px 0 #242424;}
+.iph::after{content:'';position:absolute;right:-2.5px;top:100px;width:2.5px;height:46px;background:#242424;border-radius:0 2px 2px 0;}
+.iph-screen{background:#faf8f5;border-radius:33px;overflow:hidden;display:flex;flex-direction:column;height:480px;}
+.iph-island{width:72px;height:22px;background:#1c1c1c;border-radius:16px;margin:8px auto 0;flex-shrink:0;position:relative;}
+.iph-island::after{content:'';position:absolute;right:11px;top:50%;transform:translateY(-50%);width:6px;height:6px;border-radius:50%;background:#2ec4b6;opacity:0.55;}
+.iph-hd{display:flex;align-items:center;justify-content:space-between;padding:6px 13px 7px;flex-shrink:0;}
+.iph-brand{display:flex;align-items:center;gap:5px;}
+.iph-rings{position:relative;width:17px;height:17px;display:flex;align-items:center;justify-content:center;}
+.iph-rings::before{content:'';position:absolute;width:16px;height:16px;border-radius:50%;border:1.5px solid #2ec4b6;opacity:0.25;}
+.iph-rings::after{content:'';position:absolute;width:10px;height:10px;border-radius:50%;border:1.5px solid #2ec4b6;opacity:0.55;}
+.iph-dot{width:4px;height:4px;border-radius:50%;background:#2ec4b6;position:relative;z-index:1;}
+.iph-nm{font-family:'DM Sans',sans-serif;font-size:11.5px;font-weight:600;color:#0a0a08;}
+.iph-st{display:flex;align-items:center;gap:3px;font-family:'DM Sans',sans-serif;font-size:9px;color:rgba(10,10,8,0.3);}
+.iph-pip{width:4px;height:4px;border-radius:50%;background:#2ec4b6;animation:pip 2s infinite;}
+.iph-convo{flex:1;overflow-y:auto;padding:8px 10px 4px;display:flex;flex-direction:column;gap:6px;scrollbar-width:none;}
+.iph-convo::-webkit-scrollbar{display:none;}
+.iph-usr{align-self:flex-end;background:#0a0a08;color:#fff;border-radius:12px 12px 3px 12px;padding:6px 10px;font-family:'DM Sans',sans-serif;font-size:10.5px;line-height:1.5;max-width:76%;}
+.iph-ai{display:flex;align-items:flex-start;gap:5px;}
+.iph-av{width:17px;height:17px;border-radius:50%;background:rgba(46,196,182,0.12);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.iph-av-d{width:4px;height:4px;border-radius:50%;background:#2ec4b6;}
+.iph-bub{background:#fff;border:0.5px solid rgba(10,10,8,0.07);border-radius:12px 12px 12px 3px;padding:6px 10px;font-family:'DM Sans',sans-serif;font-size:10.5px;line-height:1.5;color:#0a0a08;max-width:78%;}
+/* trip card */
+.iph-card{border:0.5px solid rgba(10,10,8,0.09);border-radius:11px;overflow:hidden;margin:2px 0 0 23px;display:flex;flex-direction:column;flex-shrink:0;}
+.iph-card::-webkit-scrollbar{display:none;}
+.iph-panels-wrap{flex:1;overflow-y:auto;scrollbar-width:none;}
+.iph-panels-wrap::-webkit-scrollbar{display:none;}
+.iph-card-scroll-hint{position:sticky;bottom:0;height:18px;background:linear-gradient(to top,rgba(255,255,255,0.95),transparent);pointer-events:none;margin:0 -1px;}
+.iph-card-hd{background:linear-gradient(135deg,#0a5c52 0%,#0e7a6d 100%);padding:8px 11px;position:relative;overflow:hidden;}
+.iph-card-hd::after{content:'';position:absolute;right:-10px;top:-10px;width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,0.05);}
+.iph-dest{font-family:'Playfair Display',serif;font-size:12.5px;color:#fff;}
+.iph-meta{font-size:8px;color:rgba(255,255,255,0.5);margin-top:1px;font-family:'DM Sans',sans-serif;}
+/* day chips — clickable */
+.iph-chips{display:flex;flex-direction:row;flex-wrap:nowrap;gap:4px;padding:6px 10px;border-bottom:0.5px solid rgba(10,10,8,0.06);overflow:hidden;}
+.iph-chip{font-family:'DM Sans',sans-serif;font-size:7.5px;font-weight:600;padding:3px 0;border-radius:5px;cursor:pointer;transition:background 0.15s,color 0.15s;text-align:center;flex:1;white-space:nowrap;}
+.iph-chip.on{background:#2ec4b6;color:#0a0a08;}
+.iph-chip.off{background:rgba(46,196,182,0.1);color:#2ec4b6;}
+.iph-chip.off:hover{background:rgba(46,196,182,0.2);}
+/* day panels */
+.iph-panel{display:none;padding:7px 10px 8px;animation:fadeIn 0.18s ease;}
+.iph-panel.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(2px);}to{opacity:1;transform:translateY(0);}}
+.iph-day-lbl{font-family:'DM Mono',monospace;font-size:7px;font-weight:600;color:#2ec4b6;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:2px;}
+.iph-day-t{font-family:'DM Sans',sans-serif;font-size:10.5px;font-weight:600;color:#0a0a08;margin-bottom:2px;}
+.iph-day-d{font-family:'DM Sans',sans-serif;font-size:8.5px;color:rgba(10,10,8,0.4);line-height:1.4;margin-bottom:5px;}
+.iph-row-lbl{font-family:'DM Mono',monospace;font-size:6.5px;font-weight:700;color:#2ec4b6;letter-spacing:0.1em;text-transform:uppercase;margin:3px 0 2px;}
+.iph-fl{display:flex;align-items:center;justify-content:space-between;background:#faf8f5;border:0.5px solid rgba(10,10,8,0.06);border-radius:6px;padding:5px 7px;margin-bottom:3px;}
+.iph-fl-al{font-family:'DM Mono',monospace;font-size:7px;font-weight:600;color:#2ec4b6;}
+.iph-fl-rt{font-family:'DM Sans',sans-serif;font-size:9.5px;font-weight:600;color:#0a0a08;}
+.iph-fl-mt{font-family:'DM Sans',sans-serif;font-size:7.5px;color:rgba(10,10,8,0.38);}
+.iph-fl-pr{font-family:'Playfair Display',serif;font-size:10.5px;color:#0a0a08;}
+.iph-fl-btn{font-family:'DM Sans',sans-serif;font-size:7.5px;font-weight:700;background:#2ec4b6;color:#0a0a08;border:none;border-radius:4px;padding:3px 6px;cursor:pointer;}
+.iph-rst{display:flex;align-items:center;gap:5px;background:#faf8f5;border:0.5px solid rgba(10,10,8,0.06);border-radius:6px;padding:5px 7px;margin-bottom:3px;}
+.iph-rst-ic{width:18px;height:18px;border-radius:4px;background:rgba(232,77,28,0.1);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0;}
+.iph-rst-n{font-family:'DM Sans',sans-serif;font-size:9.5px;font-weight:600;color:#0a0a08;}
+.iph-rst-m{font-family:'DM Sans',sans-serif;font-size:7.5px;color:rgba(10,10,8,0.38);}
+.iph-rst-btn{font-family:'DM Sans',sans-serif;font-size:7.5px;font-weight:700;background:#e84d1c;color:#fff;border:none;border-radius:4px;padding:3px 6px;flex-shrink:0;margin-left:auto;cursor:pointer;}
+.iph-act{display:flex;align-items:center;gap:5px;background:rgba(46,196,182,0.06);border:0.5px solid rgba(46,196,182,0.2);border-radius:6px;padding:5px 7px;}
+.iph-act-ic{font-size:9px;flex-shrink:0;}
+.iph-act-t{font-family:'DM Sans',sans-serif;font-size:9px;font-weight:500;color:#0a5c52;}
+.iph-inp{display:flex;align-items:center;gap:6px;padding:6px 10px 9px;background:#fff;border-top:0.5px solid rgba(10,10,8,0.06);flex-shrink:0;margin-top:auto;}
+.iph-ibox{flex:1;padding:5px 10px;background:#f5f2ed;border:none;border-radius:99px;font-family:'DM Sans',sans-serif;font-size:10.5px;color:rgba(10,10,8,0.28);}
+.iph-send{width:24px;height:24px;border-radius:50%;background:#2ec4b6;border:none;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:900px){
+  .iphone-inner{grid-template-columns:1fr;gap:3rem;}
+  .iphone-frame{order:-1;}
+  .iph{width:240px;}
+  .nav,.foot{padding:0 1.5rem;}
+  .nav-links{display:none;}
+  .hero-inner,.pillars,.decl,.decl-inner,.ember-s,.manifesto,.cta{padding-left:1.5rem;padding-right:1.5rem;}
+  .decl-inner,.pillar-grid,.ember-s,.contrast{grid-template-columns:1fr;gap:2.5rem;}
+  .pillar-num{font-size:3rem;}
+  .foot{padding:1.25rem 1.5rem;}
+}
+@media(max-width:600px){
+  .iphone-s{padding:4rem 1.25rem;}
+  .iph{width:220px;}
+  .hero-inner{padding:0 1.25rem 4rem;}
+  .hero h1{font-size:clamp(3rem,14vw,5rem);}
+  .hero-ctas{flex-direction:column;align-items:flex-start;}
+  .pillars,.ember-s,.manifesto,.cta{padding:4rem 1.25rem;}
+  .pillar{padding:2rem 1.5rem;}
+  .cta-actions{flex-direction:column;}
+  .foot{padding:1.25rem;flex-direction:column;align-items:flex-start;gap:0.75rem;}
+}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <span class="nav-brand">WatchWeWin</span>
+  <div class="nav-links">
+    <a href="#ember">Ember</a>
+    <a href="#cta">start the conversation</a>
+  </div>
+  <a class="nav-cta" href="mailto:explore@watchwewin.com">start the conversation</a>
+</div>
+
+<section class="hero">
+  <video autoplay muted loop playsinline>
+    <source src="https://watchwewin.com/wp-content/uploads/2025/12/WWWE-60-Sec-Event-Recap.webm" type="video/webm">
+  </video>
+  <div class="hero-inner">
+    <div class="hero-tag">WatchWeWin</div>
+    <h1>Strategy.<br>Systems.<br><em>Storytelling.</em></h1>
+    <p class="hero-sub">We don't hand off decks. We build the strategy, the system, and the story — and stay in the room until all three are running.</p>
+    <div class="hero-ctas">
+      <a class="btn-hot" href="mailto:explore@watchwewin.com">start the conversation</a>
+      <a class="btn-cool" href="#ember">see Ember →</a>
+    </div>
+  </div>
+</section>
+
+<div class="marquee"><div class="marquee-inner">
+  <span>Strategy · Systems · Storytelling ·</span>
+  <span>Discover · Design · Develop · Deploy · Deliver ·</span>
+  <span>Investors · Acquisitions · Creative Production ·</span>
+  <span>The process is the point ·</span>
+  <span>Strategy · Systems · Storytelling ·</span>
+  <span>Discover · Design · Develop · Deploy · Deliver ·</span>
+  <span>Investors · Acquisitions · Creative Production ·</span>
+  <span>The process is the point ·</span>
+</div></div>
+
+<div class="pillars-wrap"><section class="pillars">
+  <div class="pillars-pre">How we work</div>
+  <h2 class="pillars-h">From Strategy<br>to Transformation:<br><em>Systems &amp; Storytelling.</em></h2>
+  <div class="pillar-grid">
+    <div class="pillar">
+      <div class="pillar-num">01</div>
+      <div class="pillar-name">Strategy</div>
+      <p class="pillar-body"><strong>The 5D Conversation.</strong> Discover, Design, Develop, Deploy, Deliver. Every engagement starts blank and ends live — no skipped steps, nothing handed off incomplete.</p>
+      <div class="pillar-tags"><span class="ptag">Discover</span><span class="ptag">Design</span><span class="ptag">Develop</span><span class="ptag">Deploy</span><span class="ptag">Deliver</span></div>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num">02</div>
+      <div class="pillar-name">Systems</div>
+      <p class="pillar-body"><strong>Built for how decisions actually get made.</strong> Infrastructure for investors and acquisitions — not the org chart version, the real version. Solutions that work in the room.</p>
+      <div class="pillar-tags"><span class="ptag">Investors</span><span class="ptag">Acquisitions</span><span class="ptag">Solutions</span><span class="ptag">Operations</span></div>
+      <div class="pillar-clients">
+        <div class="pc">
+          <div class="pc-name"><a href="https://www.dataiku.com/" target="_blank" rel="noopener">Dataiku</a></div>
+          <div class="pc-bar"></div>
+          <div class="pc-delivery"><strong>$8M AI portfolio</strong> — 13 enterprise transformations across analytics, adoption, and delivery</div>
+        </div>
+        <div class="pc">
+          <div class="pc-name"><a href="https://www.disney.com/" target="_blank" rel="noopener">Disney</a></div>
+          <div class="pc-bar"></div>
+          <div class="pc-delivery"><strong>Marketing operations</strong> — systems infrastructure at the scale of an iconic global brand</div>
+        </div>
+        <div class="pc">
+          <div class="pc-name"><a href="https://satisfilabs.com/" target="_blank" rel="noopener">Satisfi Labs</a></div>
+          <div class="pc-bar"></div>
+          <div class="pc-delivery"><strong>Conversational AI &amp; commerce</strong> — intelligent fan engagement and transactional systems</div>
+        </div>
+      </div>
+    </div>
+    <div class="pillar">
+      <div class="pillar-num">03</div>
+      <div class="pillar-name">Storytelling</div>
+      <p class="pillar-body"><strong>The narrative is part of the work.</strong> Art, music, ads — creative production that makes strategy visible and systems felt. Story runs alongside everything else.</p>
+      <div class="pillar-tags"><span class="ptag">Art</span><span class="ptag">Music</span><span class="ptag">Ads</span><span class="ptag">Creative Direction</span></div>
+      <div class="pillar-clients">
+        <div class="pc">
+          <div class="pc-name"><a href="https://www.purplespideragency.com/" target="_blank" rel="noopener">Purple Spider</a></div>
+          <div class="pc-bar"></div>
+          <div class="pc-delivery"><strong>Brand + Live Experiences</strong> — produced by Purple Spider Agency<br><a href="https://www.purplespideragency.com/mtst" target="_blank" rel="noopener" style="color:inherit;font-style:italic;">ClassicNewWave Music To Series</a> <span style="color:rgba(255,255,255,0.25);">(Consultant)</span> · <a href="https://www.purplespideragency.com/budweiser" target="_blank" rel="noopener" style="color:inherit;font-style:italic;">Budweiser</a> <span style="color:rgba(255,255,255,0.25);">(Executive Producer)</span></div>
+        </div>
+        <div class="pc">
+          <div class="pc-name"><a href="https://classicnewwave.xyz/" target="_blank" rel="noopener">ClassicNewWave</a></div>
+          <div class="pc-bar"></div>
+          <div class="pc-delivery"><strong>Music + culture</strong> — narrative strategy and artist development</div>
+        </div>
+        <div class="pc">
+          <div class="pc-name"><a href="https://pro2ceo.com/" target="_blank" rel="noopener">Pro2CEO</a></div>
+          <div class="pc-bar"></div>
+          <div class="pc-delivery"><strong>Executive story</strong> — leadership positioning and content systems for founders</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section></div>
+
+<div class="decl">
+  <div class="decl-inner">
+    <h2 class="decl-h">The process<br>is the point.<br><em>The win is a bonus.</em></h2>
+    <div class="decl-body">
+      <p>Three disciplines. One obsession. WatchWeWin runs strategy, systems, and storytelling as a single integrated practice — because none of them work in isolation.</p>
+      <p><strong>Ember is what that obsession looks like as a product.</strong> A patent-pending conversational AI built to prove that the right system removes complexity without adding friction.</p>
+      <a class="decl-link" href="#ember">see Ember →</a>
+    </div>
+  </div>
+</div>
+
+<div class="ember-wrap"><section class="ember-s" id="ember">
+  <div>
+    <div class="ember-tag">Ember — by WatchWeWin</div>
+    <h2 class="ember-h">Conversations<br>that remove<br><em>complexity.</em></h2>
+  </div>
+  <div>
+    <div class="ember-truth">
+      <div class="ember-truth-lbl">The insight</div>
+      <p class="ember-truth-txt">The problem was never access. It was always the space between knowing and doing — the friction, the tabs, the forgetting. Ember closes that gap through conversation.</p>
+    </div>
+    <div class="contrast">
+      <div class="cc">
+        <div class="cc-lbl">The old story</div>
+        <div class="cc-head">You need more.</div>
+        <p class="cc-body">More apps. More subscriptions. The answer is always addition. Always one more thing to manage.</p>
+      </div>
+      <div class="cc mid">
+        <div class="cc-lbl">The Ember answer</div>
+        <div class="cc-head">You already have it.</div>
+        <p class="cc-body">Ember clears the path to what's already there — through one conversation, not another dashboard.</p>
+      </div>
+      <div class="cc">
+        <div class="cc-lbl">The feeling</div>
+        <div class="cc-head">Relief, not hype.</div>
+        <p class="cc-body">Not "look what AI can do." Just — finally, something that gets out of the way and lets you live.</p>
+      </div>
+    </div>
+  </div>
+</section></div>
+
+<section class="manifesto">
+  <div class="manifesto-inner">
+    <div class="manifesto-tag">Ember</div>
+    <blockquote class="manifesto-pull">We already have everything. Ember is for the things.</blockquote>
+    <div class="manifesto-body">
+      <p class="lead">The restaurant you keep meaning to try. The trip that's been half-planned for three months. The message to someone you've been putting off because you couldn't find the words.</p>
+      <p>These things are already out there. The friction isn't access — it's the space between knowing and doing. The tabs left open. The apps you downloaded and forgot.</p>
+      <p class="pop">Ember is for the things.</p>
+      <p>Not a dashboard. Not a to-do list with a chat window. A conversation — one that learns how you live and quietly removes what's standing between you and what you already have access to.</p>
+      <p class="close">You already have everything you need. Ember just helps you use it.</p>
+    </div>
+  </div>
+</section>
+
+<section class="iphone-s">
+  <div class="iphone-inner">
+
+    <div class="iphone-copy">
+      <div class="iphone-copy-tag">Ember in action</div>
+      <h2>One message.<br><em>A full trip built.</em></h2>
+      <p>Tell Ember what you want. It gathers just enough context, then acts — flights, restaurants, an itinerary, a reservation. No tabs. No searching. No friction between idea and plan.</p>
+      <p><strong>This is a real conversation.</strong> The Puerto Rico trip, El Yunque, Marmalade for the birthday dinner — all built inline, in one thread. Tap the day chips to navigate.</p>
+      <div class="iphone-copy-features">
+        <div class="icf"><div class="icf-dot"></div><div class="icf-text"><strong>Flights</strong> — bookable cards with airline, times, and price. One tap to Google Flights.</div></div>
+        <div class="icf"><div class="icf-dot"></div><div class="icf-text"><strong>Restaurants</strong> — real names, real neighborhoods, OpenTable reservation links.</div></div>
+        <div class="icf"><div class="icf-dot"></div><div class="icf-text"><strong>Itineraries</strong> — full day-by-day plans built inline. Never leaves the conversation.</div></div>
+        <div class="icf"><div class="icf-dot"></div><div class="icf-text"><strong>Context</strong> — Ember holds your circle, plans, and situations across every session.</div></div>
+      </div>
+    </div>
+
+    <div class="iphone-frame">
+      <div class="iphone-glow"></div>
+      <div class="iph">
+        <div class="iph-screen">
+          <div class="iph-island"></div>
+          <div class="iph-hd">
+            <div class="iph-brand">
+              <div class="iph-rings"><div class="iph-dot"></div></div>
+              <span class="iph-nm">ember</span>
+            </div>
+            <div class="iph-st"><div class="iph-pip"></div><span id="iph-msg-count">5 msgs</span><span style="margin-left:4px;font-size:8px;color:rgba(10,10,8,0.2);">↕ scroll</span></div>
+          </div>
+
+          <!-- Full scrollable conversation -->
+          <div class="iph-convo" id="iph-convo">
+
+            <!-- msg 1 -->
+            <div class="iph-usr">Plan a 5-day birthday trip to Puerto Rico. Love hiking, great food, beaches.</div>
+
+            <!-- msg 2 -->
+            <div class="iph-ai">
+              <div class="iph-av"><div class="iph-av-d"></div></div>
+              <div class="iph-bub">Got it — when are you thinking, and are you flying out of Tampa?</div>
+            </div>
+
+            <!-- msg 3 -->
+            <div class="iph-usr">Second week of May. Yes TPA.</div>
+
+            <!-- msg 4 -->
+            <div class="iph-ai">
+              <div class="iph-av"><div class="iph-av-d"></div></div>
+              <div class="iph-bub">Perfect. AA has a nonstop TPA→SJU for $210. I'll build the full 5 days around May 7–11.</div>
+            </div>
+
+            <!-- msg 5 — ember delivers the trip -->
+            <div class="iph-ai">
+              <div class="iph-av"><div class="iph-av-d"></div></div>
+              <div class="iph-bub">Here's your trip. Tap the days to navigate.</div>
+            </div>
+
+          <div class="iph-card">
+            <div class="iph-card-hd">
+              <div class="iph-dest">San Juan, Puerto Rico</div>
+              <div class="iph-meta">May 7 – 11 · 1 traveler · Birthday trip</div>
+            </div>
+            <div class="iph-chips" id="iph-chips">
+              <div class="iph-chip on" onclick="iphDay(0)">Day 1</div>
+              <div class="iph-chip off" onclick="iphDay(1)">Day 2</div>
+              <div class="iph-chip off" onclick="iphDay(2)">Day 3</div>
+              <div class="iph-chip off" onclick="iphDay(3)">Day 4</div>
+              <div class="iph-chip off" onclick="iphDay(4)">Day 5</div>
+            </div>
+
+            <div class="iph-panels-wrap">
+            <!-- Day 1 -->
+            <div class="iph-panel active" id="iph-d0">
+              <div class="iph-day-lbl">Day 1 · May 7</div>
+              <div class="iph-day-t">Arrive + Settle</div>
+              <div class="iph-day-d">Land SJU, Condado check-in, sunset beach walk.</div>
+              <div class="iph-row-lbl">✈ Flight</div>
+              <div class="iph-fl">
+                <div><div class="iph-fl-al">AA · American</div><div class="iph-fl-rt">TPA → SJU</div><div class="iph-fl-mt">9:00am – 12:30pm · Nonstop</div></div>
+                <div style="text-align:right"><div class="iph-fl-pr">from $210</div><button class="iph-fl-btn">Select</button></div>
+              </div>
+              <div class="iph-row-lbl">🍽 Dinner</div>
+              <div class="iph-rst">
+                <div class="iph-rst-ic">🍽</div>
+                <div><div class="iph-rst-n">Santaella</div><div class="iph-rst-m">Puerto Rican · $$$ · Santurce · ★ 4.7</div></div>
+                <button class="iph-rst-btn">Reserve</button>
+              </div>
+            </div>
+
+            <!-- Day 2 -->
+            <div class="iph-panel" id="iph-d1">
+              <div class="iph-day-lbl">Day 2 · May 8</div>
+              <div class="iph-day-t">El Yunque Rainforest</div>
+              <div class="iph-day-d">La Mina trail with a guide. Natural pool swim. Back for sunset in Old San Juan.</div>
+              <div class="iph-row-lbl">🥾 Activity</div>
+              <div class="iph-act">
+                <span class="iph-act-ic">🌿</span>
+                <span class="iph-act-t">La Mina Trail — guided · 4hr · Depart 8am</span>
+              </div>
+              <div class="iph-row-lbl">🍽 Dinner</div>
+              <div class="iph-rst">
+                <div class="iph-rst-ic">🍽</div>
+                <div><div class="iph-rst-n">La Factoria</div><div class="iph-rst-m">Craft cocktails + small plates · Old San Juan</div></div>
+                <button class="iph-rst-btn">Reserve</button>
+              </div>
+            </div>
+
+            <!-- Day 3 — Birthday -->
+            <div class="iph-panel" id="iph-d2">
+              <div class="iph-day-lbl">Day 3 · May 9 · 🎂 Birthday</div>
+              <div class="iph-day-t">Old San Juan + Dinner</div>
+              <div class="iph-day-d">Castillo San Felipe, Calle del Cristo, birthday dinner at Marmalade.</div>
+              <div class="iph-row-lbl">🍽 Birthday Dinner</div>
+              <div class="iph-rst">
+                <div class="iph-rst-ic">🕯</div>
+                <div><div class="iph-rst-n">Marmalade</div><div class="iph-rst-m">New American · $$$$ · Old San Juan · ★ 4.8</div></div>
+                <button class="iph-rst-btn">Reserve</button>
+              </div>
+              <div class="iph-row-lbl">🏰 Sightseeing</div>
+              <div class="iph-act">
+                <span class="iph-act-ic">🏰</span>
+                <span class="iph-act-t">Castillo San Felipe del Morro — 9am open</span>
+              </div>
+            </div>
+
+            <!-- Day 4 -->
+            <div class="iph-panel" id="iph-d3">
+              <div class="iph-day-lbl">Day 4 · May 10</div>
+              <div class="iph-day-t">Flamenco Beach, Culebra</div>
+              <div class="iph-day-d">Ferry to Culebra. Best beach in Puerto Rico. Back by evening.</div>
+              <div class="iph-row-lbl">⛴ Ferry</div>
+              <div class="iph-fl">
+                <div><div class="iph-fl-al">Ferries del Caribe</div><div class="iph-fl-rt">Ceiba → Culebra</div><div class="iph-fl-mt">7:30am depart · 1hr · Round trip</div></div>
+                <div style="text-align:right"><div class="iph-fl-pr">$4.50</div><button class="iph-fl-btn">Book</button></div>
+              </div>
+              <div class="iph-row-lbl">🍽 Lunch</div>
+              <div class="iph-rst">
+                <div class="iph-rst-ic">🦞</div>
+                <div><div class="iph-rst-n">El Pescador</div><div class="iph-rst-m">Seafood · $$ · Culebra · Cash only</div></div>
+                <button class="iph-rst-btn">Map</button>
+              </div>
+            </div>
+
+            <!-- Day 5 -->
+            <div class="iph-panel" id="iph-d4">
+              <div class="iph-day-lbl">Day 5 · May 11</div>
+              <div class="iph-day-t">Last Morning + Depart</div>
+              <div class="iph-day-d">Miramar coffee, Condado walk, SJU by 1pm for 3pm flight home.</div>
+              <div class="iph-row-lbl">☕ Morning</div>
+              <div class="iph-act">
+                <span class="iph-act-ic">☕</span>
+                <span class="iph-act-t">Café Comunión, Miramar — opens 7am</span>
+              </div>
+              <div class="iph-row-lbl">✈ Return Flight</div>
+              <div class="iph-fl">
+                <div><div class="iph-fl-al">AA · American</div><div class="iph-fl-rt">SJU → TPA</div><div class="iph-fl-mt">3:00pm – 6:15pm · Nonstop</div></div>
+                <div style="text-align:right"><div class="iph-fl-pr">from $195</div><button class="iph-fl-btn">Select</button></div>
+              </div>
+            </div>
+
+            </div><!-- .iph-panels-wrap -->
+          </div><!-- .iph-card -->
+
+          </div><!-- .iph-convo -->
+
+          <div class="iph-inp">
+            <div class="iph-ibox">What's the situation?</div>
+            <div class="iph-send">
+              <svg width="10" height="10" viewBox="0 0 16 16" fill="none"><path d="M2 8h12M8 2l6 6-6 6" stroke="#0a0a08" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+function iphDay(n){
+  var chips=document.getElementById('iph-chips').querySelectorAll('.iph-chip');
+  var panels=document.querySelectorAll('.iph-panel');
+  var counts=['5 msgs','6 msgs','7 msgs','8 msgs','9 msgs'];
+  chips.forEach(function(c,i){c.className='iph-chip '+(i===n?'on':'off');});
+  panels.forEach(function(p,i){p.className='iph-panel'+(i===n?' active':'');});
+  var mc=document.getElementById('iph-msg-count');
+  if(mc)mc.textContent=counts[n];
+  // scroll panels wrap to top when switching days
+  var pw=document.querySelector('.iph-panels-wrap');
+  if(pw)pw.scrollTop=0;
+}
+// on load: scroll convo to bottom so trip card is visible
+document.addEventListener('DOMContentLoaded',function(){
+  var convo=document.getElementById('iph-convo');
+  if(convo)convo.scrollTop=convo.scrollHeight;
+});
+</script>
+
+<section class="cta" id="cta">
+  <div class="cta-inner">
+    <h2>One<br>conversation.<br><em>That's it.</em></h2>
+    <p>No pitch deck. Just tell us what you're building and whether the firm fits.</p>
+    <div class="cta-actions">
+      <a class="cta-go" href="mailto:explore@watchwewin.com">start the conversation →</a>
+      <a class="cta-gh" href="https://github.com/positivelympw/ember" target="_blank" rel="noopener">view ember on GitHub →</a>
+    </div>
+  </div>
+</section>
+
+<div class="foot">
+  <span class="foot-brand">WatchWeWin</span>
+  <span class="foot-tag">Strategy. Systems. Storytelling. — Ember: Conversations removing complexity.</span>
+  <div class="foot-links">
+    <a href="mailto:explore@watchwewin.com">Contact</a>
+    <a href="https://github.com/positivelympw/ember">GitHub</a>
+    <a href="https://watchwewin.com">watchwewin.com</a>
+  </div>
+</div>
+
+</body>
+</html>
